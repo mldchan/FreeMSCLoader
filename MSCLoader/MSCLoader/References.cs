@@ -15,4 +15,3 @@ internal class References
     public RefVersion UpdateInfo;
 #endif
 }
-

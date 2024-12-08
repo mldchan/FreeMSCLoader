@@ -5,6 +5,9 @@ internal class BC_ModUpdate : MonoBehaviour
 {
     internal ModLoader modLoader;
 
-    private void Update() => modLoader.BC_Update();
+    private void Update()
+    {
+        modLoader.BC_Update();
+    }
 }
 #endif

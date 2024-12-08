@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
 
@@ -7,14 +6,27 @@ namespace MSCLoader;
 
 internal class ConsoleView : MonoBehaviour
 {
-    internal ConsoleController controller;
     public GameObject viewContainer; //Container for console view, should be a child of this GameObject
     public Text logTextArea;
     public InputField inputField;
-    private bool wasFocused;
     private int commands, pos;
+    internal ConsoleController controller;
+
+    private bool wasFocused;
+
+    // Event that should be called by anything wanting to submit the current input to the console.
+    public void RunCommand()
+    {
 #if !Mini
-    void Awake()
+        controller.RunCommandString(inputField.text);
+        inputField.text = string.Empty;
+        //keep active input field
+        inputField.ActivateInputField();
+        inputField.Select();
+#endif
+    }
+#if !Mini
+    private void Awake()
     {
         controller = new ConsoleController();
         controller.logChanged += OnLogChanged;
@@ -22,7 +34,7 @@ internal class ConsoleView : MonoBehaviour
         SetVisibility(false);
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         controller.logChanged -= OnLogChanged;
     }
@@ -45,55 +57,38 @@ internal class ConsoleView : MonoBehaviour
         viewContainer.SetActive(visible);
     }
 
-    void OnLogChanged(string[] newLog)
+    private void OnLogChanged(string[] newLog)
     {
         UpdateLogStr(newLog);
     }
 
-    void UpdateLogStr(string[] newLog)
+    private void UpdateLogStr(string[] newLog)
     {
         if (newLog == null)
-        {
             logTextArea.text = "";
-        }
         else
-        {
             logTextArea.text = string.Join(Environment.NewLine, newLog);
-        }
     }
 #endif
-    // Event that should be called by anything wanting to submit the current input to the console.
-    public void RunCommand()
-    {
-#if !Mini
-        controller.RunCommandString(inputField.text);
-        inputField.text = string.Empty;
-        //keep active input field
-        inputField.ActivateInputField();
-        inputField.Select();
-#endif
-    }
 #if !Mini
     private void FixedUpdate()
     {
         if (inputField.text.Length > 0 && (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter)))
-        {
             RunCommand();
-        }
     }
+
     private void Update()
     {
         if (inputField.isFocused)
         {
-
             if (!wasFocused)
             {
                 wasFocused = true;
                 commands = controller.commandHistory.Count;
                 pos = commands;
             }
+
             if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
                 //if any command was entered before
                 if (commands != 0)
                 {
@@ -102,9 +97,8 @@ internal class ConsoleView : MonoBehaviour
                     inputField.text = controller.commandHistory[pos];
                     inputField.MoveTextEnd(false);
                 }
-            }
+
             if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
                 if (commands != 0)
                 {
                     pos++;
@@ -117,13 +111,12 @@ internal class ConsoleView : MonoBehaviour
                     {
                         pos--;
                     }
-
                 }
-            }
+
             if (inputField.text.Length > 0 && Input.GetKey(KeyCode.RightArrow))
             {
                 //Autocomplete command name
-                List<string> found = controller.commands.Keys.Where(w => w.StartsWith(inputField.text)).ToList();
+                var found = controller.commands.Keys.Where(w => w.StartsWith(inputField.text)).ToList();
                 if (found.Count > 0)
                 {
                     inputField.text = found[0];

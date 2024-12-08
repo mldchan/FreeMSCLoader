@@ -5,41 +5,39 @@ using System.IO;
 namespace MSCLoader;
 
 /// <summary>
-/// Parse playlists files
+///     Parse playlists files
 /// </summary>
 public class Playlists
 {
     /// <summary>
-    /// Parse *.pls playlist file and return List of paths
+    ///     Parse *.pls playlist file and return List of paths
     /// </summary>
     /// <param name="path">Path to *.pls file</param>
     /// <returns>List of paths to files/urls</returns>
     public static List<string> plsPlaylist(string path)
     {
-        FileStream s1 = new FileStream(path, FileMode.Open);
+        var s1 = new FileStream(path, FileMode.Open);
         return plsPlaylist(s1);
     }
 
     /// <summary>
-    /// Parse *.pls playlist file and return List of paths
+    ///     Parse *.pls playlist file and return List of paths
     /// </summary>
     /// <param name="stream">File stream</param>
     /// <returns>List of paths to files/urls</returns>
     public static List<string> plsPlaylist(Stream stream)
     {
-        List<string> playlist = new List<string>();
-        StreamReader streamReader = new StreamReader(stream);
+        var playlist = new List<string>();
+        var streamReader = new StreamReader(stream);
         if (!streamReader.EndOfStream)
         {
-            string header = streamReader.ReadLine().Trim();
-            if (header.Trim() != "[playlist]")
-            {
-                return playlist;
-            }
+            var header = streamReader.ReadLine().Trim();
+            if (header.Trim() != "[playlist]") return playlist;
         }
+
         while (!streamReader.EndOfStream)
         {
-            string line = streamReader.ReadLine().Trim();
+            var line = streamReader.ReadLine().Trim();
             if (line.StartsWith("File"))
             {
                 string path = null;
@@ -47,7 +45,9 @@ public class Playlists
                 {
                     path = line.Substring(line.IndexOf('=') + 1);
                 }
-                catch { }
+                catch
+                {
+                }
 
                 if (path != null)
                     playlist.Add(path);
@@ -61,33 +61,34 @@ public class Playlists
                 //skip
             }
         }
+
         return playlist;
     }
 
     /// <summary>
-    /// Parse *.m3u and *.m3u8 playlist files and return List of paths
+    ///     Parse *.m3u and *.m3u8 playlist files and return List of paths
     /// </summary>
     /// <param name="path">Path to .m3u or *.m3u8 file</param>
     /// <returns>List of paths to files/urls</returns>
     public static List<string> m3uPlaylist(string path)
     {
-        FileStream s1 = new FileStream(path, FileMode.Open);
+        var s1 = new FileStream(path, FileMode.Open);
         return m3uPlaylist(s1);
     }
 
     /// <summary>
-    /// Parse *.m3u and *.m3u8 playlist files and return List of paths
+    ///     Parse *.m3u and *.m3u8 playlist files and return List of paths
     /// </summary>
     /// <param name="stream">File stream</param>
     /// <returns>List of paths to files/urls</returns>
     public static List<string> m3uPlaylist(Stream stream)
     {
-        List<string> playlist = new List<string>();
-        StreamReader streamReader = new StreamReader(stream);
-        bool IsExtended = false;
+        var playlist = new List<string>();
+        var streamReader = new StreamReader(stream);
+        var IsExtended = false;
         if (!streamReader.EndOfStream)
         {
-            string header = streamReader.ReadLine().Trim();
+            var header = streamReader.ReadLine().Trim();
             if (header == "#EXTM3U")
             {
                 IsExtended = true;
@@ -98,10 +99,11 @@ public class Playlists
                 playlist.Add(header);
             }
         }
-        bool prevLineIsExtInf = false;
+
+        var prevLineIsExtInf = false;
         while (!streamReader.EndOfStream)
         {
-            string line = streamReader.ReadLine();
+            var line = streamReader.ReadLine();
             if (line.StartsWith("#"))
             {
                 if (IsExtended)
@@ -114,7 +116,6 @@ public class Playlists
                     else if (line.StartsWith("#EXTALB"))
                     {
                         //skip
-
                     }
                     else if (line.StartsWith("#EXTART"))
                     {
@@ -128,10 +129,12 @@ public class Playlists
                 {
                     //skip
                 }
+
                 playlist.Add(line);
                 prevLineIsExtInf = false;
             }
         }
+
         return playlist;
     }
 }

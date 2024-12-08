@@ -1,27 +1,26 @@
 ﻿using UnityEngine.UI;
 
-namespace MSCLoader
+namespace MSCLoader;
+
+internal class ColorImage : MonoBehaviour
 {
-    internal class ColorImage : MonoBehaviour
+    public ColorPicker picker;
+
+    public Image image;
+
+    private void Awake()
     {
-        public ColorPicker picker;
+        image = GetComponent<Image>();
+        picker.onValueChanged.AddListener(ColorChanged);
+    }
 
-        public Image image;
+    private void OnDestroy()
+    {
+        picker.onValueChanged.RemoveListener(ColorChanged);
+    }
 
-        private void Awake()
-        {
-            image = GetComponent<Image>();
-            picker.onValueChanged.AddListener(ColorChanged);
-        }
-
-        private void OnDestroy()
-        {
-            picker.onValueChanged.RemoveListener(ColorChanged);
-        }
-
-        private void ColorChanged(Color32 newColor)
-        {
-            image.color = newColor;
-        }
+    private void ColorChanged(Color32 newColor)
+    {
+        image.color = newColor;
     }
 }

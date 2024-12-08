@@ -6,35 +6,20 @@ namespace MSCLoader;
 
 public class OBJLoader
 {
-    private struct meshStruct
-    {
-        public Vector3[] vertices;
-        public Vector3[] normals;
-        public Vector2[] uv;
-        //public Vector2[] uv1;
-        //public Vector2[] uv2;
-        public int[] triangles;
-        //public int[] faceVerts;
-        //public int[] faceUVs;
-        public Vector3[] faceData;
-        //public string name;
-        public string fileName;
-    }
-
     // Use this for initialization
     public Mesh ImportFile(string filePath)
     {
-        meshStruct newMesh = createMeshStruct(filePath);
+        var newMesh = createMeshStruct(filePath);
         populateMeshStruct(ref newMesh);
 
-        Vector3[] newVerts = new Vector3[newMesh.faceData.Length];
-        Vector2[] newUVs = new Vector2[newMesh.faceData.Length];
-        Vector3[] newNormals = new Vector3[newMesh.faceData.Length];
-        int i = 0;
+        var newVerts = new Vector3[newMesh.faceData.Length];
+        var newUVs = new Vector2[newMesh.faceData.Length];
+        var newNormals = new Vector3[newMesh.faceData.Length];
+        var i = 0;
         /* The following foreach loops through the facedata and assigns the appropriate vertex, uv, or normal
          * for the appropriate Unity mesh array.
          */
-        foreach (Vector3 v in newMesh.faceData)
+        foreach (var v in newMesh.faceData)
         {
             newVerts[i] = newMesh.vertices[(int)v.x - 1];
             if (v.y >= 1)
@@ -45,7 +30,7 @@ public class OBJLoader
             i++;
         }
 
-        Mesh mesh = new Mesh();
+        var mesh = new Mesh();
 
         mesh.vertices = newVerts;
         mesh.uv = newUVs;
@@ -60,36 +45,34 @@ public class OBJLoader
 
     private static meshStruct createMeshStruct(string filename)
     {
-        int triangles = 0;
-        int vertices = 0;
-        int vt = 0;
-        int vn = 0;
-        int face = 0;
-        meshStruct mesh = new meshStruct();
+        var triangles = 0;
+        var vertices = 0;
+        var vt = 0;
+        var vn = 0;
+        var face = 0;
+        var mesh = new meshStruct();
         mesh.fileName = filename;
-        StreamReader stream = File.OpenText(filename);
-        string entireText = stream.ReadToEnd();
+        var stream = File.OpenText(filename);
+        var entireText = stream.ReadToEnd();
         stream.Close();
-        using (StringReader reader = new StringReader(entireText))
+        using (var reader = new StringReader(entireText))
         {
-            string currentText = reader.ReadLine();
+            var currentText = reader.ReadLine();
             char[] splitIdentifier = { ' ' };
             string[] brokenString;
             while (currentText != null)
-            {
                 if (!currentText.StartsWith("f ") && !currentText.StartsWith("v ") && !currentText.StartsWith("vt ")
                     && !currentText.StartsWith("vn "))
                 {
                     currentText = reader.ReadLine();
-                    if (currentText != null)
-                    {
-                        currentText = currentText.Replace("  ", " ");
-                    }
+                    if (currentText != null) currentText = currentText.Replace("  ", " ");
                 }
                 else
                 {
-                    currentText = currentText.Trim();                           //Trim the current line
-                    brokenString = currentText.Split(splitIdentifier, 50);      //Split the line into an array, separating the original line by blank spaces
+                    currentText = currentText.Trim(); //Trim the current line
+                    brokenString =
+                        currentText.Split(splitIdentifier,
+                            50); //Split the line into an array, separating the original line by blank spaces
                     switch (brokenString[0])
                     {
                         case "v":
@@ -103,19 +86,19 @@ public class OBJLoader
                             break;
                         case "f":
                             face = face + brokenString.Length - 1;
-                            triangles = triangles + 3 * (brokenString.Length - 2); /*brokenString.Length is 3 or greater since a face must have at least
-                                                                                     3 vertices.  For each additional vertice, there is an additional
-                                                                                     triangle in the mesh (hence this formula).*/
+                            triangles = triangles +
+                                        3 * (brokenString.Length -
+                                             2); /*brokenString.Length is 3 or greater since a face must have at least
+                                                                                                      3 vertices.  For each additional vertice, there is an additional
+                                                                                                      triangle in the mesh (hence this formula).*/
                             break;
                     }
+
                     currentText = reader.ReadLine();
-                    if (currentText != null)
-                    {
-                        currentText = currentText.Replace("  ", " ");
-                    }
+                    if (currentText != null) currentText = currentText.Replace("  ", " ");
                 }
-            }
         }
+
         mesh.triangles = new int[triangles];
         mesh.vertices = new Vector3[vertices];
         mesh.uv = new Vector2[vt];
@@ -126,36 +109,34 @@ public class OBJLoader
 
     private static void populateMeshStruct(ref meshStruct mesh)
     {
-        StreamReader stream = File.OpenText(mesh.fileName);
-        string entireText = stream.ReadToEnd();
+        var stream = File.OpenText(mesh.fileName);
+        var entireText = stream.ReadToEnd();
         stream.Close();
-        using (StringReader reader = new StringReader(entireText))
+        using (var reader = new StringReader(entireText))
         {
-            string currentText = reader.ReadLine();
+            var currentText = reader.ReadLine();
 
             char[] splitIdentifier = { ' ' };
             char[] splitIdentifier2 = { '/' };
             string[] brokenString;
             string[] brokenBrokenString;
-            int f = 0;
-            int f2 = 0;
-            int v = 0;
-            int vn = 0;
-            int vt = 0;
-            int vt1 = 0;
-            int vt2 = 0;
+            var f = 0;
+            var f2 = 0;
+            var v = 0;
+            var vn = 0;
+            var vt = 0;
+            var vt1 = 0;
+            var vt2 = 0;
             while (currentText != null)
-            {
                 if (!currentText.StartsWith("f ") && !currentText.StartsWith("v ") && !currentText.StartsWith("vt ") &&
-                    !currentText.StartsWith("vn ") && !currentText.StartsWith("g ") && !currentText.StartsWith("usemtl ") &&
-                    !currentText.StartsWith("mtllib ") && !currentText.StartsWith("vt1 ") && !currentText.StartsWith("vt2 ") &&
+                    !currentText.StartsWith("vn ") && !currentText.StartsWith("g ") &&
+                    !currentText.StartsWith("usemtl ") &&
+                    !currentText.StartsWith("mtllib ") && !currentText.StartsWith("vt1 ") &&
+                    !currentText.StartsWith("vt2 ") &&
                     !currentText.StartsWith("vc ") && !currentText.StartsWith("usemap "))
                 {
                     currentText = reader.ReadLine();
-                    if (currentText != null)
-                    {
-                        currentText = currentText.Replace("  ", " ");
-                    }
+                    if (currentText != null) currentText = currentText.Replace("  ", " ");
                 }
                 else
                 {
@@ -172,54 +153,64 @@ public class OBJLoader
                         case "mtllib":
                             break;
                         case "v":
-                            mesh.vertices[v] = new Vector3(Convert.ToSingle(brokenString[1]), Convert.ToSingle(brokenString[2]),
-                                                     Convert.ToSingle(brokenString[3]));
+                            mesh.vertices[v] = new Vector3(Convert.ToSingle(brokenString[1]),
+                                Convert.ToSingle(brokenString[2]),
+                                Convert.ToSingle(brokenString[3]));
                             v++;
                             break;
                         case "vt":
-                            mesh.uv[vt] = new Vector2(Convert.ToSingle(brokenString[1]), Convert.ToSingle(brokenString[2]));
+                            mesh.uv[vt] = new Vector2(Convert.ToSingle(brokenString[1]),
+                                Convert.ToSingle(brokenString[2]));
                             vt++;
                             break;
                         case "vt1":
-                            mesh.uv[vt1] = new Vector2(Convert.ToSingle(brokenString[1]), Convert.ToSingle(brokenString[2]));
+                            mesh.uv[vt1] = new Vector2(Convert.ToSingle(brokenString[1]),
+                                Convert.ToSingle(brokenString[2]));
                             vt1++;
                             break;
                         case "vt2":
-                            mesh.uv[vt2] = new Vector2(Convert.ToSingle(brokenString[1]), Convert.ToSingle(brokenString[2]));
+                            mesh.uv[vt2] = new Vector2(Convert.ToSingle(brokenString[1]),
+                                Convert.ToSingle(brokenString[2]));
                             vt2++;
                             break;
                         case "vn":
-                            mesh.normals[vn] = new Vector3(Convert.ToSingle(brokenString[1]), Convert.ToSingle(brokenString[2]),
-                                                    Convert.ToSingle(brokenString[3]));
+                            mesh.normals[vn] = new Vector3(Convert.ToSingle(brokenString[1]),
+                                Convert.ToSingle(brokenString[2]),
+                                Convert.ToSingle(brokenString[3]));
                             vn++;
                             break;
                         case "vc":
                             break;
                         case "f":
 
-                            int j = 1;
-                            List<int> intArray = new List<int>();
+                            var j = 1;
+                            var intArray = new List<int>();
                             while (j < brokenString.Length && ("" + brokenString[j]).Length > 0)
                             {
-                                Vector3 temp = new Vector3();
-                                brokenBrokenString = brokenString[j].Split(splitIdentifier2, 3);    //Separate the face into individual components (vert, uv, normal)
+                                var temp = new Vector3();
+                                brokenBrokenString =
+                                    brokenString[j]
+                                        .Split(splitIdentifier2,
+                                            3); //Separate the face into individual components (vert, uv, normal)
                                 temp.x = Convert.ToInt32(brokenBrokenString[0]);
-                                if (brokenBrokenString.Length > 1)                                  //Some .obj files skip UV and normal
+                                if (brokenBrokenString.Length > 1) //Some .obj files skip UV and normal
                                 {
-                                    if (brokenBrokenString[1] != "")                                    //Some .obj files skip the uv and not the normal
-                                    {
+                                    if (brokenBrokenString[1] != "") //Some .obj files skip the uv and not the normal
                                         temp.y = Convert.ToInt32(brokenBrokenString[1]);
-                                    }
                                     temp.z = Convert.ToInt32(brokenBrokenString[2]);
                                 }
+
                                 j++;
 
                                 mesh.faceData[f2] = temp;
                                 intArray.Add(f2);
                                 f2++;
                             }
+
                             j = 1;
-                            while (j + 2 < brokenString.Length)     //Create triangles out of the face data.  There will generally be more than 1 triangle per face.
+                            while
+                                (j + 2 < brokenString
+                                    .Length) //Create triangles out of the face data.  There will generally be more than 1 triangle per face.
                             {
                                 mesh.triangles[f] = intArray[0];
                                 f++;
@@ -230,15 +221,34 @@ public class OBJLoader
 
                                 j++;
                             }
+
                             break;
                     }
+
                     currentText = reader.ReadLine();
                     if (currentText != null)
-                    {
-                        currentText = currentText.Replace("  ", " ");       //Some .obj files insert double spaces, this removes them.
-                    }
+                        currentText =
+                            currentText.Replace("  ", " "); //Some .obj files insert double spaces, this removes them.
                 }
-            }
         }
+    }
+
+    private struct meshStruct
+    {
+        public Vector3[] vertices;
+        public Vector3[] normals;
+
+        public Vector2[] uv;
+
+        //public Vector2[] uv1;
+        //public Vector2[] uv2;
+        public int[] triangles;
+
+        //public int[] faceVerts;
+        //public int[] faceUVs;
+        public Vector3[] faceData;
+
+        //public string name;
+        public string fileName;
     }
 }

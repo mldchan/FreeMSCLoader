@@ -6,14 +6,16 @@ namespace MSCLoader;
 
 internal class KeybindList
 {
-    public List<Keybinds> keybinds = new List<Keybinds>();
+    public List<Keybinds> keybinds = new();
 }
+
 internal class Keybinds
 {
     public string ID { get; set; }
     public KeyCode Key { get; set; }
     public KeyCode Modifier { get; set; }
 }
+
 internal class KeyBinding : MonoBehaviour
 {
     public Text KeybindName;
@@ -27,15 +29,15 @@ internal class KeyBinding : MonoBehaviour
     public Text keyDisplay;
     public Button keyButton;
     public Image buttonImage;
+    public string id;
+    private readonly Color originalColor = new Color32(101, 34, 18, 255);
 
-    bool reassignKey = false;
-    bool ismodifier = false;
-
-    Color toggleColor = new Color32(101, 130, 18, 255);
-    Color originalColor = new Color32(101, 34, 18, 255);
+    private readonly Color toggleColor = new Color32(101, 130, 18, 255);
+    private bool ismodifier;
 
     public Mod mod;
-    public string id;
+
+    private bool reassignKey;
 #if !Mini
     public void LoadBind(Keybind kb, Mod m)
     {
@@ -51,33 +53,24 @@ internal class KeyBinding : MonoBehaviour
         keyDisplay.text = key.ToString().ToUpper();
     }
 
-    void Update()
+    private void Update()
     {
         if (reassignKey)
-        {
             //Checks if key is pressed and if button has been pressed indicating wanting to re-assign
             if (Input.anyKeyDown)
             {
-                KeyCode[] keyCodes = (KeyCode[])Enum.GetValues(typeof(KeyCode));
-                for (int i = 0; i < keyCodes.Length; i++)
-                {
+                var keyCodes = (KeyCode[])Enum.GetValues(typeof(KeyCode));
+                for (var i = 0; i < keyCodes.Length; i++)
                     if (Input.GetKeyDown(keyCodes[i]))
                     {
                         if (keyCodes[i] != KeyCode.Mouse0 && keyCodes[i] != KeyCode.Mouse1) //LMB = cancel
-                        {
                             UpdateKeyCode(keyCodes[i], ismodifier);
-                        }
                         if (keyCodes[i] == KeyCode.Mouse1) //RMB = sets to none
-                        {
                             UpdateKeyCode(KeyCode.None, ismodifier);
-                        }
                         ChangeKeyCode(false, ismodifier);
                         break;
                     }
-                }
-
             }
-        }
     }
 
     public void ChangeKeyCode(bool toggle, bool modifier)
@@ -99,9 +92,10 @@ internal class KeyBinding : MonoBehaviour
                 buttonImage.color = originalColor;
         }
     }
-    void UpdateKeyCode(KeyCode kcode, bool modifier)
+
+    private void UpdateKeyCode(KeyCode kcode, bool modifier)
     {
-        Keybind bind = mod.Keybinds.Find(x => x.ID == id);
+        var bind = mod.Keybinds.Find(x => x.ID == id);
         if (modifier)
         {
             bind.Modifier = kcode;
@@ -112,8 +106,8 @@ internal class KeyBinding : MonoBehaviour
             bind.Key = kcode;
             keyDisplay.text = kcode.ToString().ToUpper();
         }
+
         ModMenu.SaveModBinds(mod);
     }
 #endif
 }
-

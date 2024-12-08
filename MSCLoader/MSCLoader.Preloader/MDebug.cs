@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace MSCLoader.Preloader
 {
-    class MDebug
+    internal class MDebug
     {
-        private static TraceSource ts = new TraceSource("MSCLoader");
-        private static TextWriterTraceListener tw = new TextWriterTraceListener("MSCLoader_Preloader.txt");
+        private static readonly TraceSource ts = new TraceSource("MSCLoader");
+        private static readonly TextWriterTraceListener tw = new TextWriterTraceListener("MSCLoader_Preloader.txt");
 
         public static void Init()
         {
             ts.Switch.Level = SourceLevels.All;
             ts.Listeners.Add(tw);
             Log($"MSCLoader Preloader Log {DateTime.Now.ToString("u")}");
-            Log($"Version {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}", true);
+            Log($"Version {Assembly.GetExecutingAssembly().GetName().Version}", true);
         }
 
         public static void Log(string message, bool newline = false)

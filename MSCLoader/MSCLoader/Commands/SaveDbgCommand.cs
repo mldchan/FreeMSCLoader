@@ -18,29 +18,31 @@ internal class SaveDbgCommand : ConsoleCommand
         {
             if (args[0].ToLower() == "mod")
             {
-                bool yes = false;
+                var yes = false;
                 SaveLoad.LoadModsSaveData();
-                string[] tags = SaveLoad.saveFileData.GetTags();
+                var tags = SaveLoad.saveFileData.GetTags();
 
-                foreach (string tag in tags)
-                {
+                foreach (var tag in tags)
                     if (args.Length > 2)
                     {
                         if (tag == $"{args[1]}||{args[2]}")
                         {
                             yes = true;
-                            ES2Header header = new ES2Header();
+                            var header = new ES2Header();
                             if (SaveLoad.headers.ContainsKey(tag))
                                 SaveLoad.headers.TryGetValue(tag, out header);
                             switch (header.collectionType)
                             {
                                 case ES2Keys.Key._Null:
-                                    ModConsole.Print($"[<color=lime>{ES2TypeManager.GetES2Type(header.valueType).type.Name}</color>] -> <color=aqua>{tag.Split('|')[2]}</color>");
+                                    ModConsole.Print(
+                                        $"[<color=lime>{ES2TypeManager.GetES2Type(header.valueType).type.Name}</color>] -> <color=aqua>{tag.Split('|')[2]}</color>");
                                     break;
                                 default:
-                                    ModConsole.Print($"[<color=lime>{ES2TypeManager.GetES2Type(header.valueType).type.Name}</color>][<color=orange>{header.collectionType}</color>] -> <color=aqua>{tag.Split('|')[2]}</color>");
+                                    ModConsole.Print(
+                                        $"[<color=lime>{ES2TypeManager.GetES2Type(header.valueType).type.Name}</color>][<color=orange>{header.collectionType}</color>] -> <color=aqua>{tag.Split('|')[2]}</color>");
                                     break;
                             }
+
                             break;
                         }
                     }
@@ -49,25 +51,24 @@ internal class SaveDbgCommand : ConsoleCommand
                         if (tag.StartsWith($"{args[1]}||"))
                         {
                             yes = true;
-                            ES2Header header = new ES2Header();
+                            var header = new ES2Header();
                             if (SaveLoad.headers.ContainsKey(tag))
                                 SaveLoad.headers.TryGetValue(tag, out header);
                             switch (header.collectionType)
                             {
                                 case ES2Keys.Key._Null:
-                                    ModConsole.Print($"[<color=lime>{ES2TypeManager.GetES2Type(header.valueType).type.Name}</color>] -> <color=aqua>{tag.Split('|')[2]}</color>");
+                                    ModConsole.Print(
+                                        $"[<color=lime>{ES2TypeManager.GetES2Type(header.valueType).type.Name}</color>] -> <color=aqua>{tag.Split('|')[2]}</color>");
                                     break;
                                 default:
-                                    ModConsole.Print($"[<color=lime>{ES2TypeManager.GetES2Type(header.valueType).type.Name}</color>][<color=orange>{header.collectionType}</color>] -> <color=aqua>{tag.Split('|')[2]}</color>");
+                                    ModConsole.Print(
+                                        $"[<color=lime>{ES2TypeManager.GetES2Type(header.valueType).type.Name}</color>][<color=orange>{header.collectionType}</color>] -> <color=aqua>{tag.Split('|')[2]}</color>");
                                     break;
                             }
                         }
                     }
-                }
-                if (!yes)
-                {
-                    ModConsole.Print($"{args[1]} - not found");
-                }
+
+                if (!yes) ModConsole.Print($"{args[1]} - not found");
             }
         }
         else if (args.Length == 1)
@@ -75,10 +76,10 @@ internal class SaveDbgCommand : ConsoleCommand
             if (args[0].ToLower() == "list")
             {
                 SaveLoad.LoadModsSaveData();
-                string[] tags = SaveLoad.saveFileData.GetTags();
-                List<string> mods = new List<string>();
-                string last = string.Empty;
-                foreach (string tag in tags)
+                var tags = SaveLoad.saveFileData.GetTags();
+                var mods = new List<string>();
+                var last = string.Empty;
+                foreach (var tag in tags)
                 {
                     if (tag == "MSCLoaderInternalStuff") continue;
                     if (tag.Split('|')[0] != last)
@@ -87,25 +88,24 @@ internal class SaveDbgCommand : ConsoleCommand
                         mods.Add(last);
                     }
                 }
+
                 if (mods.Count == 0)
                 {
-                    ModConsole.Print($"[<color=yellow>Mods.txt has no saved values.</color>]");
+                    ModConsole.Print("[<color=yellow>Mods.txt has no saved values.</color>]");
                     return;
                 }
+
                 ModConsole.Print($"[<color=red>!</color>] -> mod is not installed{Environment.NewLine}");
                 ModConsole.Print("List of mods with saved values:");
-                foreach (string m in mods)
+                foreach (var m in mods)
                 {
-                    bool ismod = ModLoader.IsModPresent(m, true);
-                    int savedStuff = tags.Where(x => x.StartsWith(m)).Count();
+                    var ismod = ModLoader.IsModPresent(m, true);
+                    var savedStuff = tags.Where(x => x.StartsWith(m)).Count();
                     if (ismod)
-                    {
                         ModConsole.Print($"{m} (<color=orange>{savedStuff}</color><color=lime> saved values</color>)");
-                    }
                     else
-                    {
-                        ModConsole.Print($"[<color=red>!</color>] {m} (<color=orange>{savedStuff}</color><color=lime> saved values</color>)");
-                    }
+                        ModConsole.Print(
+                            $"[<color=red>!</color>] {m} (<color=orange>{savedStuff}</color><color=lime> saved values</color>)");
                 }
             }
         }
@@ -114,7 +114,6 @@ internal class SaveDbgCommand : ConsoleCommand
             ModConsole.Error("Invalid syntax");
         }
     }
-
 }
 
 #endif

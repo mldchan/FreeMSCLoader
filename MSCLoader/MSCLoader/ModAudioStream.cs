@@ -4,33 +4,74 @@ using AudioLibrary.MP3_Streaming;
 namespace MSCLoader;
 
 /// <summary>
-/// Audio library (Play online mp3 streams)
+///     Audio library (Play online mp3 streams)
 /// </summary>
 public class ModAudioStream : MonoBehaviour
 {
     /// <summary>
-    /// Your AudioSource goes here
+    ///     Your AudioSource goes here
     /// </summary>
     public AudioSource audioSource;
 
     /// <summary>
-    /// Song info from metadata (if available)
+    ///     Song info from metadata (if available)
     /// </summary>
     public string songInfo;
 
     /// <summary>
-    /// Show debug info
+    ///     Show debug info
     /// </summary>
-    public bool showDebug = false;
+    public bool showDebug;
+
+    private readonly MP3Stream mp3s = new();
+    private string bufferInfo;
+    private bool done;
 
     private bool showDebugInfo;
-    private MP3Stream mp3s = new MP3Stream();
-    private bool done = false;
-    private string bufferInfo;
+
+    private void Update()
+    {
+        if (mp3s.decomp && !done)
+        {
+            audioSource.clip = AudioClip.Create("mp3_Stream", int.MaxValue,
+                mp3s.bufferedWaveProvider.WaveFormat.Channels,
+                mp3s.bufferedWaveProvider.WaveFormat.SampleRate,
+                true, mp3s.ReadData);
+
+            done = true; //Do not create shitload of audioclips
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        mp3s.UpdateLoop();
+        bufferInfo = mp3s.buffer_info;
+        songInfo = mp3s.song_info;
+    }
+
+    private void OnGUI()
+    {
+        if (showDebugInfo)
+        {
+            var text =
+                $"<color=orange>{mp3s.playbackState.ToString()}</color> | Buffer: <color=orange>{bufferInfo}</color> | Metadata: <color=orange>{songInfo}</color>";
+
+            if (mp3s.IsBufferNearlyFull)
+                text =
+                    $"<color=orange>{mp3s.playbackState.ToString()}</color> | Buffer: <color=orange>{bufferInfo}</color> | Metadata: <color=orange>{songInfo}</color> | <color=red>Buffer full</color>";
+            GUI.Label(new Rect(1, Screen.height - 22, Screen.width, 22), text);
+            showDebugInfo = showDebug;
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        mp3s.Dispose();
+    }
 
 
     /// <summary>
-    /// Plays the stream
+    ///     Plays the stream
     /// </summary>
     /// <param name="streamURL">stream url</param>
     public void PlayStream(string streamURL)
@@ -42,8 +83,9 @@ public class ModAudioStream : MonoBehaviour
         if (showDebug)
             showDebugInfo = true;
     }
+
     /// <summary>
-    /// Stops the stream
+    ///     Stops the stream
     /// </summary>
     public void StopStream()
     {
@@ -51,44 +93,6 @@ public class ModAudioStream : MonoBehaviour
         done = false;
         audioSource.clip = null;
     }
-    void FixedUpdate()
-    {
-        mp3s.UpdateLoop();
-        bufferInfo = mp3s.buffer_info;
-        songInfo = mp3s.song_info;
-    }
-
-    void OnGUI()
-    {
-        if (showDebugInfo)
-        {
-            string text = $"<color=orange>{mp3s.playbackState.ToString()}</color> | Buffer: <color=orange>{bufferInfo}</color> | Metadata: <color=orange>{songInfo}</color>";
-
-            if (mp3s.IsBufferNearlyFull)
-            {
-                text = $"<color=orange>{mp3s.playbackState.ToString()}</color> | Buffer: <color=orange>{bufferInfo}</color> | Metadata: <color=orange>{songInfo}</color> | <color=red>Buffer full</color>";
-            }
-            GUI.Label(new Rect(1, Screen.height - 22, Screen.width, 22), text);
-            showDebugInfo = showDebug;
-        }
-    }
-    void Update()
-    {
-        if (mp3s.decomp && !done)
-        {
-            audioSource.clip = AudioClip.Create("mp3_Stream", int.MaxValue,
-                mp3s.bufferedWaveProvider.WaveFormat.Channels,
-                mp3s.bufferedWaveProvider.WaveFormat.SampleRate,
-                true, new AudioClip.PCMReaderCallback(mp3s.ReadData));
-
-            done = true; //Do not create shitload of audioclips
-        }
-    }
-    void OnApplicationQuit()
-    {
-        mp3s.Dispose();
-    }
-
 }
 
 #endif

@@ -1,4 +1,5 @@
 ﻿#if !Mini
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,8 +11,35 @@ namespace MSCLoader;
 public class MSCUnloader : MonoBehaviour
 {
     internal static Queue<string> dm_pcon;
+    private bool doReset;
     internal bool reset;
-    bool doReset = false;
+
+    private void Update()
+    {
+        if (doReset && !Application.isLoadingLevel) //if menu is fully loaded.
+        {
+            var gos = FindObjectsOfType<GameObject>();
+            for (var i = 0; i < gos.Length; i++)
+            {
+                if (gos[i].name == "MSCUnloader")
+                    continue;
+                Destroy(gos[i]);
+            }
+
+            var gosAll = Resources.FindObjectsOfTypeAll<GameObject>()
+                .Where(x => !x.activeInHierarchy && x.transform.parent == null).ToArray();
+            for (var i = 0; i < gos.Length; i++)
+                if (LoadAssets.assetNames.Contains(gosAll[i].name.ToLower()))
+                    Destroy(gosAll[i]);
+
+            PlayMakerGlobals.Instance.Variables.FindFsmBool("SongImported").Value = false; //stupid variable name.
+
+            ModLoader.unloader = false;
+            ModLoader.returnToMainMenu = true;
+            Application.LoadLevel(Application.loadedLevelName);
+            doReset = false;
+        }
+    }
 
     internal void MSCLoaderReset()
     {
@@ -20,37 +48,11 @@ public class MSCUnloader : MonoBehaviour
             if (ModLoader.devMode && ModMenu.dm_pcon.GetValue())
             {
                 dm_pcon = new Queue<string>(ModConsole.console.controller.scrollback);
-                dm_pcon.Enqueue($"{System.Environment.NewLine}{System.Environment.NewLine}");
+                dm_pcon.Enqueue($"{Environment.NewLine}{Environment.NewLine}");
             }
+
             reset = true;
             doReset = true;
-        }
-    }
-    void Update()
-    {
-        if (doReset && !Application.isLoadingLevel) //if menu is fully loaded.
-        {
-            GameObject[] gos = FindObjectsOfType<GameObject>();
-            for (int i = 0; i < gos.Length; i++)
-            {
-                if (gos[i].name == "MSCUnloader")
-                    continue;
-                Destroy(gos[i]);
-            }
-            GameObject[] gosAll = Resources.FindObjectsOfTypeAll<GameObject>().Where(x => !x.activeInHierarchy && x.transform.parent == null).ToArray();
-            for (int i = 0; i < gos.Length; i++)
-            {
-                if (LoadAssets.assetNames.Contains(gosAll[i].name.ToLower()))
-                {
-                    Destroy(gosAll[i]);
-                }
-            }
-            PlayMakerGlobals.Instance.Variables.FindFsmBool("SongImported").Value = false; //stupid variable name.
-
-            ModLoader.unloader = false;
-            ModLoader.returnToMainMenu = true;
-            Application.LoadLevel(Application.loadedLevelName);
-            doReset = false;
         }
     }
 }
