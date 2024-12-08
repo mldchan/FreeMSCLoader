@@ -268,7 +268,6 @@ internal class ModMenuView : MonoBehaviour
         else
             tx.settingName.text += "<color=aqua>[None]</color>";
         //----------------------------------
-        bool assets = false, references = false;
         var refList = new List<References>();
         //----------------------------------
         var header2 = CreateHeader(listView.transform, "Bundle Assets", Color.yellow);
@@ -285,8 +284,7 @@ internal class ModMenuView : MonoBehaviour
             var checkbox = checkboxP.GetComponent<SettingsElement>();
             checkbox.settingName.text = "Include Assets Folder";
             checkbox.checkBox.isOn = true;
-            assets = true;
-            checkbox.checkBox.onValueChanged.AddListener(delegate { assets = checkbox.checkBox.isOn; });
+            checkbox.checkBox.onValueChanged.AddListener(delegate { _ = checkbox.checkBox.isOn; });
             checkbox.transform.SetParent(header2.HeaderListView.transform, false);
         }
 
@@ -328,7 +326,6 @@ internal class ModMenuView : MonoBehaviour
                     }
                     else
                     {
-                        references = true;
                         var checkboxP3 = Instantiate(CheckBoxPrefab);
                         var checkbox3 = checkboxP3.GetComponent<SettingsElement>();
                         checkbox3.settingName.text = rf;

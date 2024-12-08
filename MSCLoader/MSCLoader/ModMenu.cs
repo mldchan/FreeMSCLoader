@@ -22,8 +22,7 @@ internal class ModMenu : Mod
         openLinksOverlay,
         skipGameIntro,
         skipConfigScreen;
-
-    private static SettingsCheckBoxGroup checkLaunch, checkDaily, checkWeekly;
+    
     private FileVersionInfo coreVer;
 
     internal GameObject UI;
@@ -116,12 +115,7 @@ internal class ModMenu : Mod
             skipConfigScreen.SetValue(configSkip);
         }
 
-        if (checkLaunch.GetValue())
-            cfmu_set = 0;
-        else if (checkDaily.GetValue())
-            cfmu_set = 1;
-        else if (checkWeekly.GetValue())
-            cfmu_set = 7;
+        cfmu_set = 7;
     }
 
     private void SkipIntroSet()
