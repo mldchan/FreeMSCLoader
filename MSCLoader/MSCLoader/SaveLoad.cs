@@ -21,7 +21,7 @@ public class SaveLoad
     {
         saveFileData = null;
         ES2.Delete("Mods.txt");
-        ES2.Save(new byte[1] { 0x02 }, "Mods.txt?tag=MSCLoaderInternalStuff");
+        ES2.Save(new byte[1] { 0x02 }, "Mods.txt?tag=FreeLoaderInternalStuff");
     }
 
     internal static void LoadModsSaveData()
@@ -39,7 +39,7 @@ public class SaveLoad
             }
             else
             {
-                ES2.Save(new byte[1] { 0x02 }, "Mods.txt?tag=MSCLoaderInternalStuff");
+                ES2.Save(new byte[1] { 0x02 }, "Mods.txt?tag=FreeLoaderInternalStuff");
             }
         }
         catch (Exception e)
@@ -115,7 +115,7 @@ public class SaveLoad
                 }
             }
 
-            ES2.Save(new byte[1] { 0x02 }, "Mods2.txt?tag=MSCLoaderInternalStuff");
+            ES2.Save(new byte[1] { 0x02 }, "Mods2.txt?tag=FreeLoaderInternalStuff");
             ES2.Delete("Mods.txt");
             ES2.Rename("Mods2.txt", "Mods.txt");
             ModConsole.Print("Conversion done!");

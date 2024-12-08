@@ -48,7 +48,7 @@ namespace MSCLoader.Preloader
                 Environment
                     .GetCommandLineArgs(); //Environment CommandLine Arguments (in Main there are doorstop args only)
 
-            if (File.Exists("MSCLoader_Preloader.txt")) File.Delete("MSCLoader_Preloader.txt");
+            if (File.Exists("MSCLoader_Preloader.txt")) File.Delete("FreeLoader_Preloader.txt");
             MDebug.Init();
             MDebug.Log("Launch parameters");
             MDebug.Log($"{string.Join(" ", launchArgs)}", true);
@@ -237,7 +237,7 @@ namespace MSCLoader.Preloader
         {
             try
             {
-                MDebug.Log("Injecting Main MSCLoader patches...");
+                MDebug.Log("Injecting Main FreeLoader patches...");
                 HarmonyInstance.Create("MSCLoader.Main").PatchAll(Assembly.GetExecutingAssembly());
                 MDebug.Log("Done.");
             }

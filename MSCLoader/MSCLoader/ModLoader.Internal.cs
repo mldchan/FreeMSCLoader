@@ -30,7 +30,7 @@ public partial class ModLoader
     internal static List<string> ModSelfUpdateList = new();
     internal static List<string> RefSelfUpdateList = new();
 
-    internal static readonly string serverURL = "http://my-summer-car.ovh"; //Main url
+    // internal static readonly string serverURL = "http://my-summer-car.ovh"; //Main url NUKE THIS
     // internal static readonly string serverURL2 = "http://my-summer-car.ml"; //Backup secondary url (if first fails)
 
     internal static readonly string metadataURL = "man.php?v=3&modid=";
@@ -81,7 +81,7 @@ public partial class ModLoader
 
     internal string[] stdRef = new[]
     {
-        "mscorlib", "System.Core", "UnityEngine", "PlayMaker", "MSCLoader", "System", "Assembly-CSharp",
+        "mscorlib", "System.Core", "UnityEngine", "PlayMaker", "FreeLoader", "System", "Assembly-CSharp",
         "Assembly-CSharp-firstpass", "Assembly-UnityScript", "Assembly-UnityScript-firstpass", "ES2", "Ionic.Zip",
         "UnityEngine.UI", "0Harmony", "cInput", "Newtonsoft.Json", "System.Xml"
     };

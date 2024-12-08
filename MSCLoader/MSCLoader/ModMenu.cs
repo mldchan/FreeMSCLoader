@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using FreeLoader;
 using IniParser;
 using Newtonsoft.Json;
 
@@ -26,7 +27,7 @@ internal class ModMenu : Mod
     private FileVersionInfo coreVer;
 
     internal GameObject UI;
-    public override string ID => "MSCLoader_Settings";
+    public override string ID => "FreeLoader_Settings";
     public override string Name => "[INTERNAL] Mod Menu";
     public override string Version => ModLoader.MSCLoader_Ver;
     public override string Author => "piotrulos";
@@ -45,9 +46,9 @@ internal class ModMenu : Mod
         if (ModLoader.devMode)
         {
             Settings.AddHeader(this, "DevMode Settings", new Color32(0, 0, 128, 255), Color.green);
-            dm_disabler = Settings.AddCheckBox(this, "MSCLoader_dm_disabler", "Disable mods throwing errors");
-            dm_logST = Settings.AddCheckBox(this, "MSCLoader_dm_logST", "Log-all stack trace (not recommended)");
-            dm_operr = Settings.AddCheckBox(this, "MSCLoader_dm_operr", "Log-all open console on error");
+            dm_disabler = Settings.AddCheckBox(this, "FreeLoader_dm_disabler", "Disable mods throwing errors");
+            dm_logST = Settings.AddCheckBox(this, "FreeLoader_dm_logST", "Log-all stack trace (not recommended)");
+            dm_operr = Settings.AddCheckBox(this, "FreeLoader_dm_operr", "Log-all open console on error");
             dm_warn = Settings.AddCheckBox(this, "MSCLoader_dm_warn", "Log-all open console on warning");
             dm_pcon = Settings.AddCheckBox(this, "MSCLoader_dm_pcon", "Persistent console (sometimes may break font)");
         }
@@ -66,14 +67,10 @@ internal class ModMenu : Mod
         skipConfigScreen = Settings.AddCheckBox(this, "MSCLoader_skipConfigScreen", "Skip configuration screen", false,
             SkipConfigScreen);
 
-        Settings.AddHeader(this, "Update Settings");
-        Settings.AddText(this, "How often MSCLoader checks for Mod/References updates.");
-        checkLaunch = Settings.AddCheckBoxGroup(this, "MSCLoader_checkOnLaunch", "Every launch", true, "cfmu_set");
-        checkDaily = Settings.AddCheckBoxGroup(this, "MSCLoader_checkEveryDay", "Daily", false, "cfmu_set");
-        checkWeekly = Settings.AddCheckBoxGroup(this, "MSCLoader_checkEveryWeek", "Weekly", false, "cfmu_set");
-
         Settings.AddHeader(this, "MSCLoader Credits", Color.black);
         Settings.AddText(this, "All source code contributors and used libraries are listed on GitHub");
+        Settings.AddText(this,
+            "<color=pink>Freedom by mldchan!</color> <color=cyan>tr</color><color=#ff77ff>an</color>s r<color=#ff77ff>ig</color><color=cyan>hts</color>");
         Settings.AddText(this, "Non-GitHub contributions:");
         Settings.AddText(this,
             "<color=aqua>BrennFuchS</color> - New default mod icon and expanded PlayMaker extensions.");
@@ -82,7 +79,7 @@ internal class ModMenu : Mod
         coreVer = FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"),
             "MSCLoader.Preloader.dll"));
         Settings.AddText(this,
-            $"MSCLoader modules:{Environment.NewLine}<color=yellow>MSCLoader.Preloader</color>: <color=aqua>v{coreVer.FileMajorPart}.{coreVer.FileMinorPart}.{coreVer.FileBuildPart} build {coreVer.FilePrivatePart}</color>{Environment.NewLine}<color=yellow>MSCLoader</color>: <color=aqua>v{ModLoader.MSCLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
+            $"MSCLoader modules:{Environment.NewLine}<color=yellow>FreeLoader.Preloader</color>: <color=aqua>v{coreVer.FileMajorPart}.{coreVer.FileMinorPart}.{coreVer.FileBuildPart} build {coreVer.FilePrivatePart}</color>{Environment.NewLine}<color=yellow>MSCLoader</color>: <color=aqua>v{ModLoader.MSCLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
         Settings.AddText(this,
             $"Build-in libraries:{Environment.NewLine}<color=yellow>Harmony</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "0Harmony.dll")).FileVersion}</color>{Environment.NewLine}" +
             $"<color=yellow>Ionic.Zip</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "Ionic.Zip.dll")).FileVersion}</color>{Environment.NewLine}" +
@@ -140,7 +137,7 @@ internal class ModMenu : Mod
         if (coreVer.FilePrivatePart < 263)
         {
             ModUI.ShowMessage(
-                "To use <color=yellow>Skip Configuration Screen</color> you need to update the core module of MSCLoader, download the latest version and launch <color=aqua>MSCPatcher.exe</color> to update",
+                "To use <color=yellow>Skip Configuration Screen</color> you need to update the core module of FreeLoader, download the latest version and launch <color=aqua>MSCPatcher.exe</color> to update",
                 "Outdated module");
             return;
         }
@@ -171,7 +168,7 @@ internal class ModMenu : Mod
         catch (Exception e)
         {
             ModUI.ShowMessage(
-                $"Fatal error:{Environment.NewLine}<color=orange>{e.Message}</color>{Environment.NewLine}Please install MSCLoader correctly.",
+                $"Fatal error:{Environment.NewLine}<color=orange>{e.Message}</color>{Environment.NewLine}Please install FreeLoader correctly.",
                 "Fatal Error");
         }
     }

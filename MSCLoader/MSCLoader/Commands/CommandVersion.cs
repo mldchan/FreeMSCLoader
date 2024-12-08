@@ -26,7 +26,7 @@ internal class CommandVersion : ConsoleCommand
         }
 
         ModConsole.Print(
-            $"<color=yellow>MSCLoader:</color> <color=aqua><b>{ModLoader.MSCLoader_Ver}</b></color> (build <color=aqua><b>{ModLoader.Instance.currentBuild}</b></color>) []");
+            $"<color=yellow>FreeLoader:</color> <color=aqua><b>{ModLoader.MSCLoader_Ver}</b></color> (build <color=aqua><b>{ModLoader.Instance.currentBuild}</b></color>) []");
         ModConsole.Print(
             $"<color=yellow>Runtime:</color> <color=aqua><b>{Assembly.GetExecutingAssembly().ImageRuntimeVersion}</b></color>");
         ModConsole.Print($"<color=yellow>OS:</color> <color=aqua><b>{ModLoader.SystemInfoFix()}</b></color>");

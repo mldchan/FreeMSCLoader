@@ -7,39 +7,39 @@ using HutongGames.PlayMaker;
 namespace MSCLoader.Helper;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 [Obsolete(
-    "This class requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;'")]
+    "This class requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;'")]
 public static class ModHelper
 {
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void MakePickable(this GameObject gameObject, bool includeTag = true)
     {
         MSCLoaderHelpers.ModHelper.MakePickable(gameObject, includeTag);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void MakePickable(this Transform transform, bool includeTag = true)
     {
         MSCLoaderHelpers.ModHelper.MakePickable(transform, includeTag);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static Transform GetTransform(string parentPath, string childPath)
     {
         return MSCLoaderHelpers.ModHelper.GetTransform(parentPath, childPath);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static GameObject GetGameObject(string parentPath, string childPath)
     {
         return MSCLoaderHelpers.ModHelper.GetGameObject(parentPath, childPath);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void PlaySound3D(this Transform transform, string type, string variation, float volume = 1f,
         float pitch = 1f)
     {
@@ -47,7 +47,7 @@ public static class ModHelper
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void PlaySound3D(this Vector3 vector3, string type, string variation, float volume = 1f,
         float pitch = 1f)
     {
@@ -55,28 +55,28 @@ public static class ModHelper
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static T SelectRandom<T>(this IList<T> list)
     {
         return MSCLoaderHelpers.ModHelper.SelectRandom(list);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static bool InLayerMask(this LayerMask layerMask, int layer)
     {
         return MSCLoaderHelpers.ModHelper.InLayerMask(layerMask, layer);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static bool InLayerMask(this LayerMask layerMask, string layer)
     {
         return MSCLoaderHelpers.ModHelper.InLayerMask(layerMask, layer);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void SetParent(this Transform transform, Transform parent, Vector3 position, Vector3 rotation,
         Vector3 scale, string name = "")
     {
@@ -84,56 +84,56 @@ public static class ModHelper
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void OpenFolder(string path)
     {
         MSCLoaderHelpers.ModHelper.OpenFolder(path);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void OpenWebsite(string url)
     {
         MSCLoaderHelpers.ModHelper.OpenWebsite(url);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static bool IsWithinRange(this int value, int minValue, int maxValue)
     {
         return MSCLoaderHelpers.ModHelper.IsWithinRange(value, minValue, maxValue);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static string GetImagesFolder()
     {
         return MSCLoaderHelpers.ModHelper.GetImagesFolder();
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static string GetRadioFolder()
     {
         return MSCLoaderHelpers.ModHelper.GetRadioFolder();
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static string GetCD1Folder()
     {
         return MSCLoaderHelpers.ModHelper.GetCD1Folder();
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static string GetCD2Folder()
     {
         return MSCLoaderHelpers.ModHelper.GetCD2Folder();
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static string GetCD3Folder()
     {
         return MSCLoaderHelpers.ModHelper.GetCD3Folder();
@@ -141,43 +141,43 @@ public static class ModHelper
 }
 
 [Obsolete(
-    "This class requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;'")]
+    "This class requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;'")]
 public static class PlayMakerHelper
 {
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static FsmBool FSMGUIUse { get; internal set; }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static FsmBool FSMGUIAssemble { get; internal set; }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static FsmBool FSMGUIDisassemble { get; internal set; }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static FsmBool FSMGUIBuy { get; internal set; }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static FsmBool FSMGUIDrive { get; internal set; }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static FsmBool FSMGUIPassenger { get; internal set; }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static FsmString FSMGUIInteraction { get; internal set; }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static FsmString FSMGUISubtitle { get; internal set; }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static bool GUIUse
     {
         get => FSMGUIUse.Value;
@@ -185,7 +185,7 @@ public static class PlayMakerHelper
     }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static bool GUIAssemble
     {
         get => FSMGUIAssemble.Value;
@@ -193,7 +193,7 @@ public static class PlayMakerHelper
     }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static bool GUIDisassemble
     {
         get => FSMGUIDisassemble.Value;
@@ -201,7 +201,7 @@ public static class PlayMakerHelper
     }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static bool GUIBuy
     {
         get => FSMGUIBuy.Value;
@@ -209,7 +209,7 @@ public static class PlayMakerHelper
     }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static bool GUIDrive
     {
         get => FSMGUIDrive.Value;
@@ -217,7 +217,7 @@ public static class PlayMakerHelper
     }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static bool GUIPassenger
     {
         get => FSMGUIPassenger.Value;
@@ -225,7 +225,7 @@ public static class PlayMakerHelper
     }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static string GUIInteraction
     {
         get => FSMGUIInteraction.Value;
@@ -233,7 +233,7 @@ public static class PlayMakerHelper
     }
 
     [Obsolete(
-        "This property requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This property requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static string GUISubtitle
     {
         get => FSMGUISubtitle.Value;
@@ -275,168 +275,168 @@ public static class PlayMakerHelper
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static PlayMakerFSM GetPlayMakerFSM(this GameObject gameObject, string fsmName)
     {
         return MSCLoaderHelpers.PlayMakerHelper.GetPlayMakerFSM(gameObject, fsmName);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static PlayMakerFSM GetPlayMakerFSM(this Transform transform, string fsmName)
     {
         return MSCLoaderHelpers.PlayMakerHelper.GetPlayMakerFSM(transform, fsmName);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static FsmState GetState(this PlayMakerFSM fsm, string stateName)
     {
         return MSCLoaderHelpers.PlayMakerHelper.GetState(fsm, stateName);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static FsmState GetState(this PlayMakerFSM fsm, int stateIndex)
     {
         return MSCLoaderHelpers.PlayMakerHelper.GetState(fsm, stateIndex);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static T GetAction<T>(this FsmState state, int actionIndex) where T : FsmStateAction
     {
         return MSCLoaderHelpers.PlayMakerHelper.GetAction<T>(state, actionIndex);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static T GetAction<T>(this PlayMakerFSM fsm, string stateName, int actionIndex) where T : FsmStateAction
     {
         return MSCLoaderHelpers.PlayMakerHelper.GetAction<T>(fsm, stateName, actionIndex);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static T GetAction<T>(this PlayMakerFSM fsm, int stateIndex, int actionIndex) where T : FsmStateAction
     {
         return MSCLoaderHelpers.PlayMakerHelper.GetAction<T>(fsm, stateIndex, actionIndex);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void InsertAction(this FsmState state, int actionIndex, FsmStateAction action)
     {
         MSCLoaderHelpers.PlayMakerHelper.InsertAction(state, actionIndex, action);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void InsertAction(this PlayMakerFSM fsm, string stateName, int actionIndex, FsmStateAction action)
     {
         MSCLoaderHelpers.PlayMakerHelper.InsertAction(fsm, stateName, actionIndex, action);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void InsertAction(this PlayMakerFSM fsm, int stateIndex, int actionIndex, FsmStateAction action)
     {
         MSCLoaderHelpers.PlayMakerHelper.InsertAction(fsm, stateIndex, actionIndex, action);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void AddAction(this FsmState state, FsmStateAction action)
     {
         MSCLoaderHelpers.PlayMakerHelper.AddAction(state, action);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void AddAction(this PlayMakerFSM fsm, string stateName, FsmStateAction action)
     {
         MSCLoaderHelpers.PlayMakerHelper.AddAction(fsm, stateName, action);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void AddAction(this PlayMakerFSM fsm, int stateIndex, FsmStateAction action)
     {
         MSCLoaderHelpers.PlayMakerHelper.AddAction(fsm, stateIndex, action);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void ReplaceAction(this FsmState state, int actionIndex, FsmStateAction action)
     {
         MSCLoaderHelpers.PlayMakerHelper.ReplaceAction(state, actionIndex, action);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void ReplaceAction(this PlayMakerFSM fsm, string stateName, int actionIndex, FsmStateAction action)
     {
         MSCLoaderHelpers.PlayMakerHelper.ReplaceAction(fsm, stateName, actionIndex, action);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void ReplaceAction(this PlayMakerFSM fsm, int stateIndex, int actionIndex, FsmStateAction action)
     {
         MSCLoaderHelpers.PlayMakerHelper.ReplaceAction(fsm, stateIndex, actionIndex, action);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void RemoveAction(this FsmState state, int actionIndex)
     {
         MSCLoaderHelpers.PlayMakerHelper.RemoveAction(state, actionIndex);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void RemoveAction(this FsmState state, FsmStateAction action)
     {
         MSCLoaderHelpers.PlayMakerHelper.RemoveAction(state, action);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void RemoveAction(this PlayMakerFSM fsm, string stateName, int actionIndex)
     {
         MSCLoaderHelpers.PlayMakerHelper.RemoveAction(fsm, stateName, actionIndex);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void RemoveAction(this PlayMakerFSM fsm, int stateIndex, int actionIndex)
     {
         MSCLoaderHelpers.PlayMakerHelper.RemoveAction(fsm, stateIndex, actionIndex);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static T GetVariable<T>(this PlayMakerFSM fsm, string name) where T : NamedVariable
     {
         return MSCLoaderHelpers.PlayMakerHelper.GetVariable<T>(fsm, name);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static T GetGlobalVariable<T>(string name) where T : NamedVariable
     {
         return MSCLoaderHelpers.PlayMakerHelper.GetGlobalVariable<T>(name);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static T FindVariable<T>(this FsmVariables variables, string name) where T : NamedVariable
     {
         return MSCLoaderHelpers.PlayMakerHelper.FindVariable<T>(variables, name);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void Initialize(this PlayMakerFSM fsm)
     {
         MSCLoaderHelpers.PlayMakerHelper.Initialize(fsm);
@@ -444,7 +444,7 @@ public static class PlayMakerHelper
 }
 
 [Obsolete(
-    "This class requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;'")]
+    "This class requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;'")]
 public class CallAction : FsmStateAction
 {
     public Action actionToCall;
@@ -462,88 +462,88 @@ public class CallAction : FsmStateAction
 }
 
 [Obsolete(
-    "This class requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;'")]
+    "This class requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;'")]
 public static class PlayMakerProxyHelper
 {
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static PlayMakerArrayListProxy GetArrayListProxy(this GameObject gameObject, string referenceName)
     {
         return MSCLoaderHelpers.PlayMakerProxyHelper.GetArrayListProxy(gameObject, referenceName);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static PlayMakerArrayListProxy GetArrayListProxy(this Transform transform, string referenceName)
     {
         return MSCLoaderHelpers.PlayMakerProxyHelper.GetArrayListProxy(transform, referenceName);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void Add(this PlayMakerArrayListProxy proxy, object item, bool clear = false)
     {
         MSCLoaderHelpers.PlayMakerProxyHelper.Add(proxy, item, clear);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void Add(this PlayMakerArrayListProxy proxy, IEnumerable<object> items, bool clear = false)
     {
         MSCLoaderHelpers.PlayMakerProxyHelper.Add(proxy, items, clear);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void Clear(this PlayMakerArrayListProxy proxy, bool clearPrefill = false)
     {
         MSCLoaderHelpers.PlayMakerProxyHelper.Clear(proxy, clearPrefill);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void AddPrefill(this PlayMakerArrayListProxy proxy, object item, bool clear = false)
     {
         MSCLoaderHelpers.PlayMakerProxyHelper.AddPrefill(proxy, item, clear);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void AddPrefill(this PlayMakerArrayListProxy proxy, IEnumerable<object> items, bool clear = false)
     {
         MSCLoaderHelpers.PlayMakerProxyHelper.AddPrefill(proxy, items, clear);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void ClearPrefill(this PlayMakerArrayListProxy proxy)
     {
         MSCLoaderHelpers.PlayMakerProxyHelper.ClearPrefill(proxy);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static PlayMakerHashTableProxy GetHashTableProxy(this GameObject gameObject, string referenceName)
     {
         return MSCLoaderHelpers.PlayMakerProxyHelper.GetHashTableProxy(gameObject, referenceName);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static PlayMakerHashTableProxy GetHashTableProxy(this Transform transform, string referenceName)
     {
         return MSCLoaderHelpers.PlayMakerProxyHelper.GetHashTableProxy(transform, referenceName);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void Add(this PlayMakerHashTableProxy proxy, string key, object item, bool clear = false)
     {
         MSCLoaderHelpers.PlayMakerProxyHelper.Add(proxy, key, item, clear);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void Add(this PlayMakerHashTableProxy proxy, IEnumerable<string> keys, IEnumerable<object> items,
         bool clear = false)
     {
@@ -551,21 +551,21 @@ public static class PlayMakerProxyHelper
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void Clear(this PlayMakerHashTableProxy proxy, bool clearPrefill = false)
     {
         MSCLoaderHelpers.PlayMakerProxyHelper.Clear(proxy, clearPrefill);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void AddPrefill(this PlayMakerHashTableProxy proxy, string key, object item, bool clear = false)
     {
         MSCLoaderHelpers.PlayMakerProxyHelper.AddPrefill(proxy, key, item, clear);
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void AddPrefill(this PlayMakerHashTableProxy proxy, IEnumerable<string> keys,
         IEnumerable<object> items, bool clear = false)
     {
@@ -573,7 +573,7 @@ public static class PlayMakerProxyHelper
     }
 
     [Obsolete(
-        "This extension requires user to have 'Compatibility References' installed, consider not 'using MSCLoader.Helper;' and check expanded base extensions (usually under similar name)")]
+        "This extension requires user to have 'Compatibility References' installed, consider not 'using FreeLoader.Helper;' and check expanded base extensions (usually under similar name)")]
     public static void ClearPrefill(this PlayMakerHashTableProxy proxy)
     {
         MSCLoaderHelpers.PlayMakerProxyHelper.ClearPrefill(proxy);

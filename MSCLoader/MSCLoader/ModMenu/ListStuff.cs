@@ -1,6 +1,7 @@
-﻿using UnityEngine.UI;
+﻿using MSCLoader;
+using UnityEngine.UI;
 
-namespace MSCLoader;
+namespace FreeLoader;
 
 internal class ListStuff : MonoBehaviour
 {

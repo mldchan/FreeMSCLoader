@@ -1,9 +1,7 @@
 ﻿#if !Mini
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
-using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -31,75 +29,6 @@ internal class MSCLInternal
         return true;
     }
 
-    internal static string MSCLDataRequest(string reqPath, NameValueCollection msclData)
-    {
-        var response = "";
-        using (var MSCLDconn = new WebClient())
-        {
-            MSCLDconn.Headers.Add("user-agent", $"MSCLoader/{ModLoader.MSCLoader_Ver} ({ModLoader.SystemInfoFix()})");
-            try
-            {
-                var raw = MSCLDconn.UploadValues($"{ModLoader.serverURL}/{reqPath}", "POST", msclData);
-                response = Encoding.UTF8.GetString(raw, 0, raw.Length);
-            }
-            catch (Exception e)
-            {
-                ModConsole.Error($"Request failed with error: {e.Message}");
-                Console.WriteLine(e);
-                response = "error";
-            }
-        }
-#if DEBUG
-        ModConsole.Warning(response);
-#endif
-        return response;
-    }
-
-
-    internal static string MSCLDataRequest(string reqPath, Dictionary<string, string> data)
-    {
-        var msclData = new NameValueCollection { { "msclData", JsonConvert.SerializeObject(data) } };
-        return MSCLDataRequest(reqPath, msclData);
-    }
-
-    internal static string MSCLDataRequest(string reqPath, Dictionary<string, List<string>> data)
-    {
-        var msclData = new NameValueCollection { { "msclData", JsonConvert.SerializeObject(data) } };
-        return MSCLDataRequest(reqPath, msclData);
-    }
-
-    internal static void MSCLRequestAsync(string reqPath, NameValueCollection msclData)
-    {
-        AsyncRequestInProgress = true;
-        using (var webClient = new WebClient())
-        {
-            webClient.Headers.Add("user-agent", $"MSCLoader/{ModLoader.MSCLoader_Ver} ({ModLoader.SystemInfoFix()})");
-            webClient.UploadValuesCompleted += ModsUpdateData;
-            webClient.UploadProgressChanged += ModsUpdateDataProgress;
-            webClient.UploadValuesAsync(new Uri($"{ModLoader.serverURL}/{reqPath}"), "POST", msclData);
-        }
-    }
-
-    private static void ModsUpdateDataProgress(object sender, UploadProgressChangedEventArgs e)
-    {
-        AsyncRequestInProgress = true;
-    }
-
-    private static void ModsUpdateData(object sender, UploadValuesCompletedEventArgs e)
-    {
-        AsyncRequestInProgress = false;
-        if (e.Error != null)
-        {
-            ModConsole.Error("Failed to check for mods updates");
-            ModConsole.Error(e.Error.Message);
-            Console.WriteLine(e.Error);
-            AsyncRequestError = true;
-        }
-        else
-        {
-            AsyncRequestResult = Encoding.UTF8.GetString(e.Result, 0, e.Result.Length);
-        }
-    }
 
     internal static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
     {

@@ -30,15 +30,13 @@ internal class MetadataCommand : ConsoleCommand
                         return;
                     }
 
-                    if (mod != null)
-                        ModMetadata.CreateModMetadata(mod);
-                    else
+                    if (mod == null)
                         ModConsole.Error("Invalid ModID (ModID is case sensitive)");
+
                     break;
                 case "create_ref":
                     if (refs != null)
                     {
-                        ModMetadata.CreateReferenceMetadata(refs);
                     }
                     else
                     {
@@ -55,17 +53,12 @@ internal class MetadataCommand : ConsoleCommand
                         return;
                     }
 
-                    if (mod != null)
-                        ModMetadata.UploadUpdateMenu(mod);
-                    else
+                    if (mod == null)
                         ModConsole.Error("Invalid ModID (ModID is case sensitive)");
+
                     break;
                 case "update_ref":
-                    if (refs != null)
-                    {
-                        ModMetadata.UploadUpdateRef(refs);
-                    }
-                    else
+                    if (refs == null)
                     {
                         ModConsole.Error("Invalid ReferenceID, it's usually your assembly name. (case sensitive)");
                         ModConsole.Warning(
@@ -74,7 +67,6 @@ internal class MetadataCommand : ConsoleCommand
 
                     break;
                 case "auth":
-                    ModMetadata.AuthMe(args[1]);
                     break;
                 default:
                     ModConsole.Warning("Usage: metadata <create|create_ref|update|update_ref> <ModID>");

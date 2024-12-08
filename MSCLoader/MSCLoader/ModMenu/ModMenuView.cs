@@ -173,7 +173,7 @@ internal class ModMenuView : MonoBehaviour
         //Info Header
         var header = CreateHeader(listView.transform, "Mod Information", Color.cyan);
         var tx = CreateText(header.HeaderListView.transform,
-            $"<color=yellow>ID:</color> <color=aqua>{mod.ID}</color> (Compiled using MSCLoader <color=yellow>{mod.compiledVersion}</color>){Environment.NewLine}" +
+            $"<color=yellow>ID:</color> <color=aqua>{mod.ID}</color> (Compiled using FreeLoader <color=yellow>{mod.compiledVersion}</color>){Environment.NewLine}" +
             $"<color=yellow>Version:</color> <color=aqua>{mod.Version}</color>{Environment.NewLine}" +
             $"<color=yellow>Author:</color> <color=aqua>{mod.Author}</color>{Environment.NewLine}" +
             $"<color=yellow>Additional references used by this Mod:</color>{Environment.NewLine}");
@@ -259,7 +259,7 @@ internal class ModMenuView : MonoBehaviour
         //Info Header
         var header = CreateHeader(listView.transform, "Mod Information", Color.cyan);
         var tx = CreateText(header.HeaderListView.transform,
-            $"<color=yellow>ID:</color> <color=aqua>{mod.ID}</color> (Compiled using MSCLoader <color=yellow>{mod.compiledVersion}</color>){Environment.NewLine}" +
+            $"<color=yellow>ID:</color> <color=aqua>{mod.ID}</color> (Compiled using FreeLoader <color=yellow>{mod.compiledVersion}</color>){Environment.NewLine}" +
             $"<color=yellow>Version:</color> <color=aqua>{mod.Version}</color>{Environment.NewLine}" +
             $"<color=yellow>Author:</color> <color=aqua>{mod.Author}</color>{Environment.NewLine}" +
             $"<color=yellow>Additional references used by this Mod:</color>{Environment.NewLine}");
@@ -354,14 +354,17 @@ internal class ModMenuView : MonoBehaviour
             Color.black);
         uploadBtn.button.onClick.AddListener(delegate
         {
-            ModMetadata.UploadUpdate(mod, assets, references, refList.ToArray());
+            ModConsole.Error("Can't upload mods on freedom version...");
         });
         CreateText(header4.HeaderListView.transform,
             $"{Environment.NewLine}This button below updates mod's version only. Use this if you want to update version number only, without uploading update file. (mod will not be available as in-game update)");
 
         var uploadBtn2 = CreateButton(header4.HeaderListView.transform, "Update Mod version only", Color.white,
             Color.black);
-        uploadBtn2.button.onClick.AddListener(delegate { ModMetadata.UpdateModVersionNumber(mod); });
+        uploadBtn2.button.onClick.AddListener(delegate
+        {
+            ModConsole.Error("Can't upload mods on freedom version...");
+        });
     }
 
     internal static void OpenModLink(string url)

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.IO;
 using System.Linq;
-using System.Net;
 using UnityEngine.UI;
 
 namespace MSCLoader;
@@ -110,7 +109,7 @@ internal class MenuElementList : MonoBehaviour
             DisableMod.isOn = mod.isDisabled;
             DisableMod.onValueChanged.AddListener(DisableThisMod);
             QuickInfo.text =
-                $"<color=yellow>ID:</color> <color=aqua>{mod.ID}</color> (MSCLoader <color=yellow>{mod.compiledVersion}</color>){Environment.NewLine}";
+                $"<color=yellow>ID:</color> <color=aqua>{mod.ID}</color> (FreeLoader <color=yellow>{mod.compiledVersion}</color>){Environment.NewLine}";
             if (mod.hasUpdate)
                 QuickInfo.text +=
                     $"<color=yellow>Version:</color> <color=aqua>{mod.Version}</color> (<color=lime>{mod.UpdateInfo.mod_version} available</color>){Environment.NewLine}";
@@ -282,19 +281,7 @@ internal class MenuElementList : MonoBehaviour
 
     internal void ShowChangelog(string id, string ver, string name)
     {
-        var dwl = string.Empty;
-        var getdwl = new WebClient();
-        getdwl.Headers.Add("user-agent", $"MSCLoader/{ModLoader.MSCLoader_Ver} ({ModLoader.SystemInfoFix()})");
-        try
-        {
-            dwl = getdwl.DownloadString($"{ModLoader.serverURL}/changelog.php?mods={id}&vers={ver}&names={name}");
-        }
-        catch (Exception e)
-        {
-            dwl = "<color=red>Failed to download changelog...</color>";
-            Console.WriteLine(e);
-        }
-
+        var dwl = "Changelog unavailable when in freedom...";
         ModUI.ShowChangelogWindow(dwl);
     }
 
@@ -314,7 +301,10 @@ internal class MenuElementList : MonoBehaviour
                 Description.text = refs.AssemblyDescription;
             DownloadInfoTxt.text = $"Update available ({refs.UpdateInfo.ref_version})";
             if (ModLoader.RefSelfUpdateList.Contains(refs.AssemblyID))
-                DownloadUpdateBtn.onClick.AddListener(delegate { ModLoader.Instance.DownloadRefUpdate(refs); });
+                DownloadUpdateBtn.onClick.AddListener(delegate
+                {
+                    ModConsole.Error("Mod updates aren't available on freedom version...");
+                });
             else
                 DownloadUpdateBtn.gameObject.SetActive(false);
             OpenDownloadWebsiteBtn.gameObject.SetActive(false);
@@ -330,7 +320,10 @@ internal class MenuElementList : MonoBehaviour
             Author.text = $"by <color=orange>{mod.Author}</color> (<color=aqua>{mod.Version}</color>)";
             DownloadInfoTxt.text = $"New Version ({mod.UpdateInfo.mod_version})";
             if (ModLoader.ModSelfUpdateList.Contains(mod.ID))
-                DownloadUpdateBtn.onClick.AddListener(delegate { ModLoader.Instance.DownloadModUpdate(mod); });
+                DownloadUpdateBtn.onClick.AddListener(delegate
+                {
+                    ModConsole.Error("Mod updates aren't available on freedom...");
+                });
             else
                 DownloadUpdateBtn.gameObject.SetActive(false);
             if (!string.IsNullOrEmpty(mod.metadata.description))

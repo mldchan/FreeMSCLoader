@@ -20,7 +20,7 @@ public class ModConsole : Mod
 
     private GameObject UI;
 
-    public override string ID => "MSCLoader_Console";
+    public override string ID => "FreeLoader_Console";
     public override string Name => "[INTERNAL] Console";
     public override string Version => ModLoader.MSCLoader_Ver;
     public override string Author => "piotrulos";
@@ -40,10 +40,10 @@ public class ModConsole : Mod
         Settings.AddHeader(this, "MSCLoader info", Color.black);
         if (ModLoader.Instance.newBuild > ModLoader.Instance.currentBuild)
             Settings.AddText(this,
-                $"<color=orange>MSCLoader {ModLoader.MSCLoader_Ver} build {ModLoader.Instance.currentBuild}</color> -> <color=lime>MSCLoader {ModLoader.Instance.newVersion} build {ModLoader.Instance.newBuild}</color>");
+                $"<color=orange>FreeLoader {ModLoader.MSCLoader_Ver} build {ModLoader.Instance.currentBuild}</color> -> <color=lime>FreeLoader {ModLoader.Instance.newVersion} build {ModLoader.Instance.newBuild}</color>");
         else
             Settings.AddText(this,
-                $"<color=lime>MSCLoader {ModLoader.MSCLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
+                $"<color=lime>FreeLoader {ModLoader.MSCLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
         var sp = Path.Combine(ModLoader.SettingsFolder, Path.Combine("MSCLoader_Settings", "lastCheck"));
         if (File.Exists(sp))
         {
@@ -54,11 +54,6 @@ public class ModConsole : Mod
                 $"Last checked for mod updates: <color=aqua>{lastCheck.ToString("dd.MM.yyyy HH:mm:ss")}</color>");
         }
 
-        Settings.AddButton(this, "checkForUpd", "Check For Mods Updates", delegate
-        {
-            if (!ModLoader.Instance.checkForUpdatesProgress)
-                ModLoader.Instance.CheckForModsUpd(true);
-        }, Color.black, Color.white);
         Settings.AddHeader(this, "Console Settings");
         Settings.AddText(this, "Basic settings for console");
         typing = Settings.AddCheckBox(this, "MSCLoader_ConsoleTyping", "Start typing when you open console");
@@ -102,7 +97,7 @@ public class ModConsole : Mod
         catch (Exception e)
         {
             ModUI.ShowMessage(
-                $"Fatal error:{Environment.NewLine}<color=orange>{e.Message}</color>{Environment.NewLine}Please install MSCLoader correctly.",
+                $"Fatal error:{Environment.NewLine}<color=orange>{e.Message}</color>{Environment.NewLine}Please install FreeLoader correctly.",
                 "Fatal Error");
         }
 

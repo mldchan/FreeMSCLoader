@@ -136,7 +136,6 @@
         <Compile Include="ModCallbacks\BC_ModOnGUI.cs"/>
         <Compile Include="ModLoader.Internal.cs"/>
         <Compile Include="ModLoader.Public.cs"/>
-        <Compile Include="ModLoader.Updates.cs"/>
         <Compile Include="ModMenu\ListStuff.cs"/>
         <Compile Include="ModMenu\MenuElementList.cs"/>
         <Compile Include="ModMenu\ModMenuButton.cs"/>
