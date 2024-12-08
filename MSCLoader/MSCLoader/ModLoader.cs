@@ -32,7 +32,7 @@ public partial class ModLoader : MonoBehaviour
     /// <summary>
     ///     The current version of the ModLoader.
     /// </summary>
-    public static readonly string MSCLoader_Ver;
+    public static readonly string FreeLoader_Ver;
 
     /// <summary>
     ///     Is this version of ModLoader experimental (this is NOT game experimental branch)
@@ -56,10 +56,10 @@ public partial class ModLoader : MonoBehaviour
     static ModLoader()
     {
         if (Assembly.GetExecutingAssembly().GetName().Version.Build == 0)
-            MSCLoader_Ver =
+            FreeLoader_Ver =
                 $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}";
         else
-            MSCLoader_Ver =
+            FreeLoader_Ver =
                 $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}";
     }
 
@@ -72,7 +72,7 @@ public partial class ModLoader : MonoBehaviour
     /// <summary>
     ///     Main init
     /// </summary>
-    internal static void Init_NP(string cfg)
+    public static void Init_NP(string cfg)
     {
         switch (cfg)
         {
@@ -259,21 +259,21 @@ public partial class ModLoader : MonoBehaviour
         if (CheckVortexBS())
         {
             ModUI.ShowMessage(
-                $"<b><color=orange>DON'T use Vortex</color></b> to update FreeLoader, or to install tools or mods.{Environment.NewLine}<b><color=orange>Vortex isn't supported by FreeLoader</color></b>, because it's implementation breaks Mods folder by putting wrong files into it.{Environment.NewLine}{Environment.NewLine}MSCLoader will try to fix your mods folder now, <b><color=orange>please restart your game.</color></b>{Environment.NewLine}If this message shows again after restart, rebuild your Mods folder from scratch.",
+                $"<b><color=orange>DON'T use Vortex</color></b> to update FreeLoader, or to install tools or mods.{Environment.NewLine}<b><color=orange>Vortex isn't supported by FreeLoader</color></b>, because it's implementation breaks Mods folder by putting wrong files into it.{Environment.NewLine}{Environment.NewLine}FreeLoader will try to fix your mods folder now, <b><color=orange>please restart your game.</color></b>{Environment.NewLine}If this message shows again after restart, rebuild your Mods folder from scratch.",
                 "Fatal Error");
             return;
         }
 
-        LoadMod(new ModConsole(), MSCLoader_Ver);
+        LoadMod(new ModConsole(), FreeLoader_Ver);
         LoadedMods[0].A_ModSettings.Invoke();
-        LoadMod(new ModMenu(), MSCLoader_Ver);
+        LoadMod(new ModMenu(), FreeLoader_Ver);
         LoadedMods[1].A_ModSettings.Invoke();
         ModMenu.LoadSettings();
         if (experimental)
             ModConsole.Print(
-                $"<color=lime>ModLoader <b><color=aqua>v{MSCLoader_Ver}</color></b> ready</color> [<color=magenta>Experimental</color> <color=lime>build {currentBuild}</color>]");
+                $"<color=lime>ModLoader <b><color=aqua>v{FreeLoader_Ver}</color></b> ready</color> [<color=magenta>Experimental</color> <color=lime>build {currentBuild}</color>]");
         else
-            ModConsole.Print($"<color=lime>ModLoader <b><color=aqua>v{MSCLoader_Ver}</color></b> ready</color>");
+            ModConsole.Print($"<color=lime>ModLoader <b><color=aqua>v{FreeLoader_Ver}</color></b> ready</color>");
         MainMenuInfo();
         ModsUpdateDir = Directory.GetFiles(Path.Combine("Updates", "Mods"), "*.zip");
         RefsUpdateDir = Directory.GetFiles(Path.Combine("Updates", "References"), "*.zip");
@@ -599,7 +599,7 @@ public partial class ModLoader : MonoBehaviour
 
         var loading = Instantiate(loadingP);
         canvLoading = loading.GetComponent<MSCLoaderCanvasLoading>();
-        canvLoading.lHeader.text = $"MSCLOADER <color=green>{MSCLoader_Ver}</color>";
+        canvLoading.lHeader.text = $"MSCLOADER <color=green>{FreeLoader_Ver}</color>";
         DontDestroyOnLoad(loading);
 
         Destroy(loadingP);
@@ -637,7 +637,7 @@ public partial class ModLoader : MonoBehaviour
         info = mainMenuInfo.transform.GetChild(0).gameObject.GetComponent<Text>();
         mf = mainMenuInfo.transform.GetChild(1).gameObject.GetComponent<Text>();
         info.text =
-            $"Mod Loader FreeLoader <color=cyan>v{MSCLoader_Ver}</color> is ready! (<color=red>Updates disabled!</color>)";
+            $"Mod Loader FreeLoader <color=cyan>v{FreeLoader_Ver}</color> is ready! (<color=red>Updates disabled!</color>)";
         mf.text = $"<color=orange>Mods folder:</color> {ModsFolder}";
         MainMenuPath();
         mainMenuInfo.transform.SetParent(ModUI.GetCanvas(0).transform, false);
@@ -1132,7 +1132,7 @@ public partial class ModLoader : MonoBehaviour
                         $"<color=red>Potential missing files: </color><color=aqua>{string.Join(", ", addRef.ToArray())}</color>{Environment.NewLine}");
                 /* if (addRef.Count > 0)
                  {
-                     if (((addRef.Contains("MSCLoader.Features") && !ReferencesList.Select(x => x.AssemblyID).Contains("FreeLoader.Features"))) || ((addRef.Contains("MSCLoader.Helpers") && !ReferencesList.Select(x => x.AssemblyID).Contains("FreeLoader.Helpers"))))
+                     if (((addRef.Contains("MSCLoader.Features") && !ReferencesList.Select(x => x.AssemblyID).Contains("FreeLoader.Features"))) || ((addRef.Contains("FreeLoader.Helpers") && !ReferencesList.Select(x => x.AssemblyID).Contains("FreeLoader.Helpers"))))
                          ModUI.ShowYesNoMessage($"<color=yellow>{Path.GetFileName(file)}</color> - looks like a mod, but It crashed trying to load.{Environment.NewLine}{Environment.NewLine}Detected additional references used by this mod: {Environment.NewLine}<color=aqua>{string.Join(", ", addRef.ToArray())}</color> {Environment.NewLine}{Environment.NewLine} Looks like missing compatibility pack.{Environment.NewLine} Open download page?", "Crashed", delegate
                           {
                               Application.OpenURL("https://www.nexusmods.com/mysummercar/mods/732");

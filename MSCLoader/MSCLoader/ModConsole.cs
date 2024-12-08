@@ -22,7 +22,7 @@ public class ModConsole : Mod
 
     public override string ID => "FreeLoader_Console";
     public override string Name => "[INTERNAL] Console";
-    public override string Version => ModLoader.MSCLoader_Ver;
+    public override string Version => ModLoader.FreeLoader_Ver;
     public override string Author => "piotrulos";
 
     public override void ModSetup()
@@ -40,10 +40,10 @@ public class ModConsole : Mod
         Settings.AddHeader(this, "MSCLoader info", Color.black);
         if (ModLoader.Instance.newBuild > ModLoader.Instance.currentBuild)
             Settings.AddText(this,
-                $"<color=orange>FreeLoader {ModLoader.MSCLoader_Ver} build {ModLoader.Instance.currentBuild}</color> -> <color=lime>FreeLoader {ModLoader.Instance.newVersion} build {ModLoader.Instance.newBuild}</color>");
+                $"<color=orange>FreeLoader {ModLoader.FreeLoader_Ver} build {ModLoader.Instance.currentBuild}</color> -> <color=lime>FreeLoader {ModLoader.Instance.newVersion} build {ModLoader.Instance.newBuild}</color>");
         else
             Settings.AddText(this,
-                $"<color=lime>FreeLoader {ModLoader.MSCLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
+                $"<color=lime>FreeLoader {ModLoader.FreeLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
         var sp = Path.Combine(ModLoader.SettingsFolder, Path.Combine("MSCLoader_Settings", "lastCheck"));
         if (File.Exists(sp))
         {

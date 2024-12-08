@@ -71,7 +71,7 @@ public class ModUI
 
     internal static void PrepareDefaultCanvas()
     {
-        msclCanv = CreateCanvas("MSCLoader Canvas", true);
+        msclCanv = CreateCanvas("FreeLoader Canvas", true);
         msclCanv.AddComponent<MSCLCanvasManager>();
 
         //create EventSystem

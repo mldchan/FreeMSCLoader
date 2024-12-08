@@ -69,7 +69,7 @@ public partial class ModLoader
     internal string[] ModsUpdateDir;
     internal MSCUnloader mscUnloader;
     internal int newBuild = 0;
-    internal string newVersion = MSCLoader_Ver;
+    internal string newVersion = FreeLoader_Ver;
     internal Mod[] OnGUImods = new Mod[0];
     internal Mod[] OnSaveMods = new Mod[0];
 

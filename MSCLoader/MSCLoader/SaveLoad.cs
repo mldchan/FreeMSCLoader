@@ -35,7 +35,7 @@ public class SaveLoad
                 var settings = new ES2Settings("Mods.txt");
                 var es2r = new ES2Reader(settings);
                 headers = es2r.ReadAllHeaders();
-                if (!saveFileData.TagExists("MSCLoaderInternalStuff")) ConvertSeparators();
+                if (!saveFileData.TagExists("FreeLoaderInternalStuff")) ConvertSeparators();
             }
             else
             {

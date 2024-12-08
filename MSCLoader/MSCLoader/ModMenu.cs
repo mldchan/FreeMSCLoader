@@ -29,7 +29,7 @@ internal class ModMenu : Mod
     internal GameObject UI;
     public override string ID => "FreeLoader_Settings";
     public override string Name => "[INTERNAL] Mod Menu";
-    public override string Version => ModLoader.MSCLoader_Ver;
+    public override string Version => ModLoader.FreeLoader_Ver;
     public override string Author => "piotrulos";
 
     public override void ModSetup()
@@ -49,25 +49,25 @@ internal class ModMenu : Mod
             dm_disabler = Settings.AddCheckBox(this, "FreeLoader_dm_disabler", "Disable mods throwing errors");
             dm_logST = Settings.AddCheckBox(this, "FreeLoader_dm_logST", "Log-all stack trace (not recommended)");
             dm_operr = Settings.AddCheckBox(this, "FreeLoader_dm_operr", "Log-all open console on error");
-            dm_warn = Settings.AddCheckBox(this, "MSCLoader_dm_warn", "Log-all open console on warning");
-            dm_pcon = Settings.AddCheckBox(this, "MSCLoader_dm_pcon", "Persistent console (sometimes may break font)");
+            dm_warn = Settings.AddCheckBox(this, "FreeLoader_dm_warn", "Log-all open console on warning");
+            dm_pcon = Settings.AddCheckBox(this, "FreeLoader_dm_pcon", "Persistent console (sometimes may break font)");
         }
 
         Settings.AddHeader(this, "Basic Settings");
-        expWarning = Settings.AddCheckBox(this, "MSCLoader_expWarning",
+        expWarning = Settings.AddCheckBox(this, "FreeLoader_expWarning",
             "Show experimental warning (experimental branch on Steam)", true);
-        modPath = Settings.AddCheckBox(this, "MSCLoader_modPath", "Show mods folder (top left corner)", true,
+        modPath = Settings.AddCheckBox(this, "FreeLoader_modPath", "Show mods folder (top left corner)", true,
             ModLoader.MainMenuPath);
-        forceMenuVsync = Settings.AddCheckBox(this, "MSCLoader_forceMenuVsync", "60 FPS limit in Main Menu", true,
+        forceMenuVsync = Settings.AddCheckBox(this, "FreeLoader_forceMenuVsync", "60 FPS limit in Main Menu", true,
             VSyncSwitchCheckbox);
-        openLinksOverlay = Settings.AddCheckBox(this, "MSCLoader_openLinksOverlay", "Open URLs in Steam overlay", true);
+        openLinksOverlay = Settings.AddCheckBox(this, "FreeLoader_openLinksOverlay", "Open URLs in Steam overlay", true);
         Settings.AddText(this, "Skip stuff:");
-        skipGameIntro = Settings.AddCheckBox(this, "MSCLoader_skipGameIntro", "Skip game splash screen", false,
+        skipGameIntro = Settings.AddCheckBox(this, "FreeLoader_skipGameIntro", "Skip game splash screen", false,
             SkipIntroSet);
-        skipConfigScreen = Settings.AddCheckBox(this, "MSCLoader_skipConfigScreen", "Skip configuration screen", false,
+        skipConfigScreen = Settings.AddCheckBox(this, "FreeLoader_skipConfigScreen", "Skip configuration screen", false,
             SkipConfigScreen);
 
-        Settings.AddHeader(this, "MSCLoader Credits", Color.black);
+        Settings.AddHeader(this, "FreeLoader Credits", Color.black);
         Settings.AddText(this, "All source code contributors and used libraries are listed on GitHub");
         Settings.AddText(this,
             "<color=pink>Freedom by mldchan!</color> <color=cyan>tr</color><color=#ff77ff>an</color>s r<color=#ff77ff>ig</color><color=cyan>hts</color>");
@@ -77,9 +77,9 @@ internal class ModMenu : Mod
 
         Settings.AddHeader(this, "Detailed Version Information", new Color32(0, 128, 0, 255));
         coreVer = FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"),
-            "MSCLoader.Preloader.dll"));
+            "FreeLoader.Preloader.dll"));
         Settings.AddText(this,
-            $"MSCLoader modules:{Environment.NewLine}<color=yellow>FreeLoader.Preloader</color>: <color=aqua>v{coreVer.FileMajorPart}.{coreVer.FileMinorPart}.{coreVer.FileBuildPart} build {coreVer.FilePrivatePart}</color>{Environment.NewLine}<color=yellow>MSCLoader</color>: <color=aqua>v{ModLoader.MSCLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
+            $"FreeLoader modules:{Environment.NewLine}<color=yellow>FreeLoader.Preloader</color>: <color=aqua>v{coreVer.FileMajorPart}.{coreVer.FileMinorPart}.{coreVer.FileBuildPart} build {coreVer.FilePrivatePart}</color>{Environment.NewLine}<color=yellow>FreeLoader</color>: <color=aqua>v{ModLoader.FreeLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
         Settings.AddText(this,
             $"Build-in libraries:{Environment.NewLine}<color=yellow>Harmony</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "0Harmony.dll")).FileVersion}</color>{Environment.NewLine}" +
             $"<color=yellow>Ionic.Zip</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "Ionic.Zip.dll")).FileVersion}</color>{Environment.NewLine}" +
@@ -93,8 +93,8 @@ internal class ModMenu : Mod
     private void Mod_SettingsLoaded()
     {
         var ini = new FileIniDataParser().ReadFile("doorstop_config.ini");
-        var skipIntro = ini["MSCLoader"]["skipIntro"];
-        var skipCfg = ini["MSCLoader"]["skipConfigScreen"];
+        var skipIntro = ini["FreeLoader"]["skipIntro"];
+        var skipCfg = ini["FreeLoader"]["skipConfigScreen"];
         bool introSkip, configSkip;
         if (!bool.TryParse(skipIntro, out introSkip))
         {
@@ -128,7 +128,7 @@ internal class ModMenu : Mod
     {
         var parser = new FileIniDataParser();
         var ini = parser.ReadFile("doorstop_config.ini");
-        ini["MSCLoader"]["skipIntro"] = skipGameIntro.GetValue().ToString().ToLower();
+        ini["FreeLoader"]["skipIntro"] = skipGameIntro.GetValue().ToString().ToLower();
         parser.WriteFile("doorstop_config.ini", ini, Encoding.ASCII);
     }
 
@@ -144,7 +144,7 @@ internal class ModMenu : Mod
 
         var parser = new FileIniDataParser();
         var ini = parser.ReadFile("doorstop_config.ini");
-        ini["MSCLoader"]["skipConfigScreen"] = skipConfigScreen.GetValue().ToString().ToLower();
+        ini["FreeLoader"]["skipConfigScreen"] = skipConfigScreen.GetValue().ToString().ToLower();
         parser.WriteFile("doorstop_config.ini", ini, Encoding.ASCII);
     }
 
@@ -176,7 +176,7 @@ internal class ModMenu : Mod
     public void CreateSettingsUI()
     {
         var ab = LoadAssets.LoadBundle(this, "settingsui.unity3d");
-        var UIp = ab.LoadAsset<GameObject>("MSCLoader Canvas menu.prefab");
+        var UIp = ab.LoadAsset<GameObject>("FreeLoader Canvas menu.prefab");
         UI = GameObject.Instantiate(UIp);
         GameObject.DontDestroyOnLoad(UI);
         GameObject.Destroy(UIp);
