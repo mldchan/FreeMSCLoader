@@ -269,11 +269,7 @@ public partial class ModLoader : MonoBehaviour
         LoadMod(new ModMenu(), FreeLoader_Ver);
         LoadedMods[1].A_ModSettings.Invoke();
         ModMenu.LoadSettings();
-        if (experimental)
-            ModConsole.Print(
-                $"<color=lime>ModLoader <b><color=aqua>v{FreeLoader_Ver}</color></b> ready</color> [<color=magenta>Experimental</color> <color=lime>build {currentBuild}</color>]");
-        else
-            ModConsole.Print($"<color=lime>ModLoader <b><color=aqua>v{FreeLoader_Ver}</color></b> ready</color>");
+        ModConsole.Print($"<color=lime>ModLoader <b><color=aqua>v{FreeLoader_Ver}</color></b> ready</color>");
         MainMenuInfo();
         ModsUpdateDir = Directory.GetFiles(Path.Combine("Updates", "Mods"), "*.zip");
         RefsUpdateDir = Directory.GetFiles(Path.Combine("Updates", "References"), "*.zip");
@@ -599,7 +595,7 @@ public partial class ModLoader : MonoBehaviour
 
         var loading = Instantiate(loadingP);
         canvLoading = loading.GetComponent<MSCLoaderCanvasLoading>();
-        canvLoading.lHeader.text = $"MSCLOADER <color=green>{FreeLoader_Ver}</color>";
+        canvLoading.lHeader.text = $"FREELOADER <color=green>{FreeLoader_Ver}</color>";
         DontDestroyOnLoad(loading);
 
         Destroy(loadingP);

@@ -300,7 +300,7 @@ internal class ModMenuView : MonoBehaviour
                 $"<color=yellow>You can bundle references{Environment.NewLine}Do it only if reference is exclusive to your mod, otherwise you should create Reference update separately.</color>{Environment.NewLine}";
             foreach (var rf in mod.AdditionalReferences)
             {
-                if (rf.StartsWith("FreeLoader"))
+                if (rf.StartsWith("MSCLoader"))
                 {
                     tx3.settingName.text +=
                         $"{Environment.NewLine}<color=red><b>{rf}</b></color> - Cannot be bundled (blacklisted)";

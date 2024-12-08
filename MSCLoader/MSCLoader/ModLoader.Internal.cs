@@ -81,7 +81,7 @@ public partial class ModLoader
 
     internal string[] stdRef = new[]
     {
-        "mscorlib", "System.Core", "UnityEngine", "PlayMaker", "FreeLoader", "System", "Assembly-CSharp",
+        "mscorlib", "System.Core", "UnityEngine", "PlayMaker", "MSCLoader", "System", "Assembly-CSharp",
         "Assembly-CSharp-firstpass", "Assembly-UnityScript", "Assembly-UnityScript-firstpass", "ES2", "Ionic.Zip",
         "UnityEngine.UI", "0Harmony", "cInput", "Newtonsoft.Json", "System.Xml"
     };

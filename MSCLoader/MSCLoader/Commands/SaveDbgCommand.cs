@@ -81,7 +81,7 @@ internal class SaveDbgCommand : ConsoleCommand
                 var last = string.Empty;
                 foreach (var tag in tags)
                 {
-                    if (tag == "FreeLoaderInternalStuff") continue;
+                    if (tag == "MSCLoaderInternalStuff") continue;
                     if (tag.Split('|')[0] != last)
                     {
                         last = tag.Split('|')[0];

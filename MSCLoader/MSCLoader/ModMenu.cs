@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using FreeLoader;
+using MSCLoader;
 using IniParser;
 using Newtonsoft.Json;
 
@@ -26,7 +26,7 @@ internal class ModMenu : Mod
     private FileVersionInfo coreVer;
 
     internal GameObject UI;
-    public override string ID => "FreeLoader_Settings";
+    public override string ID => "MSCLoader_Settings";
     public override string Name => "[INTERNAL] Mod Menu";
     public override string Version => ModLoader.FreeLoader_Ver;
     public override string Author => "piotrulos";
@@ -45,25 +45,25 @@ internal class ModMenu : Mod
         if (ModLoader.devMode)
         {
             Settings.AddHeader(this, "DevMode Settings", new Color32(0, 0, 128, 255), Color.green);
-            dm_disabler = Settings.AddCheckBox(this, "FreeLoader_dm_disabler", "Disable mods throwing errors");
-            dm_logST = Settings.AddCheckBox(this, "FreeLoader_dm_logST", "Log-all stack trace (not recommended)");
-            dm_operr = Settings.AddCheckBox(this, "FreeLoader_dm_operr", "Log-all open console on error");
-            dm_warn = Settings.AddCheckBox(this, "FreeLoader_dm_warn", "Log-all open console on warning");
-            dm_pcon = Settings.AddCheckBox(this, "FreeLoader_dm_pcon", "Persistent console (sometimes may break font)");
+            dm_disabler = Settings.AddCheckBox(this, "MSCLoader_dm_disabler", "Disable mods throwing errors");
+            dm_logST = Settings.AddCheckBox(this, "MSCLoader_dm_logST", "Log-all stack trace (not recommended)");
+            dm_operr = Settings.AddCheckBox(this, "MSCLoader_dm_operr", "Log-all open console on error");
+            dm_warn = Settings.AddCheckBox(this, "MSCLoader_dm_warn", "Log-all open console on warning");
+            dm_pcon = Settings.AddCheckBox(this, "MSCLoader_dm_pcon", "Persistent console (sometimes may break font)");
         }
 
         Settings.AddHeader(this, "Basic Settings");
-        expWarning = Settings.AddCheckBox(this, "FreeLoader_expWarning",
+        expWarning = Settings.AddCheckBox(this, "MSCLoader_expWarning",
             "Show experimental warning (experimental branch on Steam)", true);
-        modPath = Settings.AddCheckBox(this, "FreeLoader_modPath", "Show mods folder (top left corner)", true,
+        modPath = Settings.AddCheckBox(this, "MSCLoader_modPath", "Show mods folder (top left corner)", true,
             ModLoader.MainMenuPath);
-        forceMenuVsync = Settings.AddCheckBox(this, "FreeLoader_forceMenuVsync", "60 FPS limit in Main Menu", true,
+        forceMenuVsync = Settings.AddCheckBox(this, "MSCLoader_forceMenuVsync", "60 FPS limit in Main Menu", true,
             VSyncSwitchCheckbox);
-        openLinksOverlay = Settings.AddCheckBox(this, "FreeLoader_openLinksOverlay", "Open URLs in Steam overlay", true);
+        openLinksOverlay = Settings.AddCheckBox(this, "MSCLoader_openLinksOverlay", "Open URLs in Steam overlay", true);
         Settings.AddText(this, "Skip stuff:");
-        skipGameIntro = Settings.AddCheckBox(this, "FreeLoader_skipGameIntro", "Skip game splash screen", false,
+        skipGameIntro = Settings.AddCheckBox(this, "MSCLoader_skipGameIntro", "Skip game splash screen", false,
             SkipIntroSet);
-        skipConfigScreen = Settings.AddCheckBox(this, "FreeLoader_skipConfigScreen", "Skip configuration screen", false,
+        skipConfigScreen = Settings.AddCheckBox(this, "MSCLoader_skipConfigScreen", "Skip configuration screen", false,
             SkipConfigScreen);
 
         Settings.AddHeader(this, "FreeLoader Credits", Color.black);
@@ -76,7 +76,7 @@ internal class ModMenu : Mod
 
         Settings.AddHeader(this, "Detailed Version Information", new Color32(0, 128, 0, 255));
         coreVer = FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"),
-            "FreeLoader.Preloader.dll"));
+            "MSCLoader.Preloader.dll"));
         Settings.AddText(this,
             $"FreeLoader modules:{Environment.NewLine}<color=yellow>FreeLoader.Preloader</color>: <color=aqua>v{coreVer.FileMajorPart}.{coreVer.FileMinorPart}.{coreVer.FileBuildPart} build {coreVer.FilePrivatePart}</color>{Environment.NewLine}<color=yellow>FreeLoader</color>: <color=aqua>v{ModLoader.FreeLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
         Settings.AddText(this,
@@ -92,8 +92,8 @@ internal class ModMenu : Mod
     private void Mod_SettingsLoaded()
     {
         var ini = new FileIniDataParser().ReadFile("doorstop_config.ini");
-        var skipIntro = ini["FreeLoader"]["skipIntro"];
-        var skipCfg = ini["FreeLoader"]["skipConfigScreen"];
+        var skipIntro = ini["MSCLoader"]["skipIntro"];
+        var skipCfg = ini["MSCLoader"]["skipConfigScreen"];
         bool introSkip, configSkip;
         if (!bool.TryParse(skipIntro, out introSkip))
         {
@@ -122,7 +122,7 @@ internal class ModMenu : Mod
     {
         var parser = new FileIniDataParser();
         var ini = parser.ReadFile("doorstop_config.ini");
-        ini["FreeLoader"]["skipIntro"] = skipGameIntro.GetValue().ToString().ToLower();
+        ini["MSCLoader"]["skipIntro"] = skipGameIntro.GetValue().ToString().ToLower();
         parser.WriteFile("doorstop_config.ini", ini, Encoding.ASCII);
     }
 
@@ -138,7 +138,7 @@ internal class ModMenu : Mod
 
         var parser = new FileIniDataParser();
         var ini = parser.ReadFile("doorstop_config.ini");
-        ini["FreeLoader"]["skipConfigScreen"] = skipConfigScreen.GetValue().ToString().ToLower();
+        ini["MSCLoader"]["skipConfigScreen"] = skipConfigScreen.GetValue().ToString().ToLower();
         parser.WriteFile("doorstop_config.ini", ini, Encoding.ASCII);
     }
 
@@ -170,7 +170,7 @@ internal class ModMenu : Mod
     public void CreateSettingsUI()
     {
         var ab = LoadAssets.LoadBundle(this, "settingsui.unity3d");
-        var UIp = ab.LoadAsset<GameObject>("FreeLoader Canvas menu.prefab");
+        var UIp = ab.LoadAsset<GameObject>("MSCLoader Canvas menu.prefab");
         UI = GameObject.Instantiate(UIp);
         GameObject.DontDestroyOnLoad(UI);
         GameObject.Destroy(UIp);

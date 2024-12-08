@@ -20,7 +20,7 @@ public class ModConsole : Mod
 
     private GameObject UI;
 
-    public override string ID => "FreeLoader_Console";
+    public override string ID => "MSCLoader_Console";
     public override string Name => "[INTERNAL] Console";
     public override string Version => ModLoader.FreeLoader_Ver;
     public override string Author => "piotrulos";

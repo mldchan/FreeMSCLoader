@@ -1,4 +1,4 @@
-﻿using FreeLoader;
+﻿using MSCLoader;
 using UnityEngine.UI;
 
 namespace MSCLoader;
