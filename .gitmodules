@@ -1,0 +1,3 @@
+[submodule "MSCLoader/MSCCoreLibrary"]
+	path = MSCLoader/MSCCoreLibrary
+	url = https://github.com/piotrulos/MSCCoreLibrary.git

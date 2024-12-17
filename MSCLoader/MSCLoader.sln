@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSCLoader", "MSCLoader\MSCL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSCLoader.Preloader", "MSCLoader.Preloader\MSCLoader.Preloader.csproj", "{807B36C0-F066-4736-8980-E7B18E3CB1F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSCCoreLibrary", "MSCCoreLibrary\MSCCoreLibrary\MSCCoreLibrary.csproj", "{714F4DEA-70AB-402F-A73F-D70909B237F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		MSC_Debug|Any CPU = MSC_Debug|Any CPU
@@ -26,6 +28,12 @@ Global
 		{807B36C0-F066-4736-8980-E7B18E3CB1F9}.MSC_Mini|Any CPU.Build.0 = Mini|Any CPU
 		{807B36C0-F066-4736-8980-E7B18E3CB1F9}.MSC_Release|Any CPU.ActiveCfg = Release|Any CPU
 		{807B36C0-F066-4736-8980-E7B18E3CB1F9}.MSC_Release|Any CPU.Build.0 = Release|Any CPU
+		{714F4DEA-70AB-402F-A73F-D70909B237F2}.MSC_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{714F4DEA-70AB-402F-A73F-D70909B237F2}.MSC_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{714F4DEA-70AB-402F-A73F-D70909B237F2}.MSC_Mini|Any CPU.ActiveCfg = Debug|Any CPU
+		{714F4DEA-70AB-402F-A73F-D70909B237F2}.MSC_Mini|Any CPU.Build.0 = Debug|Any CPU
+		{714F4DEA-70AB-402F-A73F-D70909B237F2}.MSC_Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{714F4DEA-70AB-402F-A73F-D70909B237F2}.MSC_Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
