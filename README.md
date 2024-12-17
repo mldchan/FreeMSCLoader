@@ -10,7 +10,13 @@ A mod loader for My Summer Car but it actually follows its own license.
 ## How does it break the license?
 
 - **Any project licensed under GPL should be compilable with hopefully all libraries findable on the internet**. MSCLoader does require the game to be installed on the user's system and the libraries linked from that, but what really breaks the license is that there are references to `MSCLoaderCore` which there's no information about. Google only returned the usages of this.
-- **The project communicates with a web server, which you don't have any access to, is closed-source and you don't know what it's doing**. On top of that, all of the communication between the server and your MSC client is **_unencrypted_**, going over **_HTTP_**. **_NOT HTTPS!_** **Your literal MSCLoader token is transferred unencrypted**, making it **subsectible for a man-in-the-middle attack**. If you interact with publishing mods, your token has the possibility of getting into somebody else's hands, and **this could be really bad**. **_The hacker could go ahead and replace your mods that you have published on MSCLoader with viruses and this will quickly spread._**. HTTPS certificates are literally free nowadays.
+- **The project communicates with a web server, which you don't have any access to, is closed-source and you don't know what it's doing**. On top of that, all of the communication between the server and your MSC client is **_unencrypted_**, going over **_HTTP_**. **_NOT HTTPS!_** **Your literal MSCLoader token is transferred unencrypted**, making it **susceptible for a man-in-the-middle attack**. If you interact with publishing mods, your token has the possibility of getting into somebody else's hands, and **this could be really bad**. **_The hacker could go ahead and replace your mods that you have published on MSCLoader with viruses and this will quickly spread._**. HTTPS certificates are literally free nowadays.
+
+This project fixes these problems, by nuking any interaction with the server whatsoever.
+
+## FAQ
+
+- **Q: How do I get mod updates?**: NexusMods helps you tell apart mods that have gotten updates by adding a visible orange badge saying "Update Available". By downloading the new version and replacing it in the mods folder, you update the mod. Mod updates aren't that frequent for you to have to update every 10 minutes.
 
 ## Reporting issues
 Please report any issues and ideas [here](https://github.com/piotrulos/MSCModLoader/issues). This project is afterall a soft fork, meaning that I will pull changes in here.
