@@ -2,10 +2,18 @@
 [![](https://img.shields.io/github/downloads/piotrulos/MSCModLoader/total.svg?style=flat-square)](#) 
 [![](https://img.shields.io/github/license/piotrulos/MSCModLoader.svg?style=flat-square)](#) 
 
-# MSCLoader
-A mod loader for My Summer Car 
+# FreeMSCLoader
+A mod loader for My Summer Car but it actually follows its own license. 
 
-Please report any issues and ideas [here](https://github.com/piotrulos/MSCModLoader/issues)
+[You can view the one that breaks its own license here.](https://github.com/piotrulos/MSCModLoader)
+
+## How does it break the license?
+
+- **Any project licensed under GPL should be compilable with hopefully all libraries findable on the internet**. MSCLoader does require the game to be installed on the user's system and the libraries linked from that, but what really breaks the license is that there are references to `MSCLoaderCore` which there's no information about. Google only returned the usages of this.
+- **The project communicates with a web server, which you don't have any access to, is closed-source and you don't know what it's doing**. On top of that, all of the communication between the server and your MSC client is **_unencrypted_**, going over **_HTTP_**. **_NOT HTTPS!_** **Your literal MSCLoader token is transferred unencrypted**, making it **subsectible for a man-in-the-middle attack**. If you interact with publishing mods, your token has the possibility of getting into somebody else's hands, and **this could be really bad**. **_The hacker could go ahead and replace your mods that you have published on MSCLoader with viruses and this will quickly spread._**. HTTPS certificates are literally free nowadays.
+
+## Reporting issues
+Please report any issues and ideas [here](https://github.com/piotrulos/MSCModLoader/issues). This project is afterall a soft fork, meaning that I will pull changes in here.
 
 **Example Mods** - this folder contains example mods source files (see documentation how to use them)  
 **Visual Studio templates** - this folder contains templates for Visual Studio for easy mod creation. (see documentation how to use them)  
@@ -13,15 +21,10 @@ Please report any issues and ideas [here](https://github.com/piotrulos/MSCModLoa
 A documentation for MSCLoader is avaliable [here](https://github.com/piotrulos/MSCModLoader/wiki) (for modders and users)  
 
 ## Installation
-1. Download the latest release of MSCLoader from [here](https://github.com/piotrulos/MSCModLoader/releases)
-2. Unpack anywhere you want **outside game folder**
-3. Open MSCPatcher.exe and click on "MSC Folder" to select game folder (in \Steam\steamapps\common\My Summer Car\)
-4. MSCPatcher will detect what version of MSCLoader you have, and allow you to update.
-5. You can select location of Mods folder if you want, or leave default
-6. After successful instalation you can click "Launch MSC", this will run game on steam.
-7. Navigate to your selected Mods folder 
-8. Put your plugins in the mods folder and your ready!
-
+1. Clone this project
+2. Build it from source (Unlike regular MSCLoader, can be built without needing MSCLoaderCore!)
+3. Install regular MSCLoader
+4. Copy MSCLoader.dll from Release folder to 
 ## License
 MSCLoader is licensed under **GNU General Public License v3.0 (GPL v3)**   
 If you want to port this to other games make sure to link original reposity in your credits and keep it under same license (open-source).
@@ -34,10 +37,12 @@ If you want to port this to other games make sure to link original reposity in y
 * [INIFileParser](https://github.com/rickyah/ini-parser) - **MIT License (MIT)**    
 
 ## Like My Work?
-If you want you can buy me a beer :)   
+If you want you can buy the original developer a beer :)
 Paypal: [Paypal.me](https://www.paypal.me/piotrulos/0eur)  
-BTC: 1NLRvUXHLhuLz5erVWyXdY7i8KmfCSjJgP  
+BTC: 1NLRvUXHLhuLz5erVWyXdY7i8KmfCSjJgP
 Thanks for all donations, even small ammount helps.
+
+If you want to buy **ME** a coffee, go ahead and do that [here](https://mldchan.dev/donate)
 
 #### Credit
 * **djoe45** for MSCLoader v0.1 that was based on **Longwelwind** and **TheNoob454** work ([PhiPatcher](https://github.com/Longwelwind/PhiScript) and [PBLoader](https://github.com/TheNoob454/PBLoader))    
