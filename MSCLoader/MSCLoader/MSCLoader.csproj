@@ -175,6 +175,12 @@
     <ItemGroup>
         <EmbeddedResource Include="CoreAssets\core.unity3d" Condition="!$(DefineConstants.Contains('Mini'))"/>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\MSCCoreLibrary\MSCCoreLibrary\MSCCoreLibrary.csproj">
+        <Project>{714f4dea-70ab-402f-a73f-d70909b237f2}</Project>
+        <Name>MSCCoreLibrary</Name>
+      </ProjectReference>
+    </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <PropertyGroup>
         <PreBuildEvent>

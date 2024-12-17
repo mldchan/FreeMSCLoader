@@ -145,8 +145,10 @@ public partial class ModLoader : MonoBehaviour
                     loaderPrepared = false;
                     mscUnloader.MSCLoaderReset();
                     unloader = true;
+                    return;
                 }
-
+                if (IsReferencePresent("MSCCoreLibrary"))
+                    TimeSchedulerCalls("stop");
                 break;
             case "Intro":
                 CurrentScene = CurrentScene.NewGameIntro;
@@ -164,15 +166,41 @@ public partial class ModLoader : MonoBehaviour
                     QualitySettings.vSyncCount = 0;
 
                 menuInfoAnim.Play("fade_out");
+                if (IsReferencePresent("MSCCoreLibrary"))
+                    TimeSchedulerCalls("start");
                 StartLoadingMods();
                 ModMenu.ModMenuHandle();
                 break;
             case "Ending":
                 CurrentScene = CurrentScene.Ending;
+                if (IsReferencePresent("MSCCoreLibrary"))
+                    TimeSchedulerCalls("stop");
                 break;
         }
     }
 
+    private void TimeSchedulerCalls(string call)
+    {
+        switch (call)
+        {
+            case "start":
+                MSCCoreLibrary.TimeScheduler.StartScheduler();
+                break;
+            case "stop":
+                MSCCoreLibrary.TimeScheduler.StopScheduler();
+                break;
+            case "load":
+                MSCCoreLibrary.TimeScheduler.LoadScheduler();
+                break;
+            case "save":
+                MSCCoreLibrary.TimeScheduler.SaveScheduler();
+                break;
+            default:
+                ModConsole.Error($"Invalid TimeScheduler call: {call}");
+                break;
+        }
+    }
+    
     private void StartLoadingMods()
     {
         if (!allModsLoaded && !IsModsLoading)
