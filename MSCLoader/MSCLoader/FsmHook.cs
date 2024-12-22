@@ -1,6 +1,6 @@
 ﻿#if !Mini
-using System;
 using HutongGames.PlayMaker;
+using System;
 
 namespace MSCLoader;
 
@@ -11,19 +11,17 @@ internal class SetMouseCursorFix : FsmStateAction
 
     public FsmBool lockCursor;
 
-    public SetMouseCursorFix(bool locked)
-    {
-        hideCursor = locked;
-        lockCursor = locked;
-    }
-
     public override void Reset()
     {
         //cursorTexture = null;
         hideCursor = false;
         lockCursor = false;
     }
-
+    public SetMouseCursorFix(bool locked)
+    {
+        hideCursor = locked;
+        lockCursor = locked;
+    }
     public override void OnEnter()
     {
         Cursor.visible = !hideCursor.Value;
@@ -37,13 +35,13 @@ internal class SetMouseCursorFix : FsmStateAction
 }
 
 /// <summary>
-///     Playmaker hook inject method.
+/// Playmaker hook inject method.
 /// </summary>
 [Obsolete("Obsolete", true)]
 public class FsmHook
 {
     /// <summary>
-    ///     Hook to playmaker state
+    /// Hook to playmaker state
     /// </summary>
     /// <param name="gameObject">GameObject where to hook</param>
     /// <param name="stateName">Name of the state</param>

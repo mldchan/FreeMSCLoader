@@ -2,23 +2,10 @@
 [![](https://img.shields.io/github/downloads/piotrulos/MSCModLoader/total.svg?style=flat-square)](#) 
 [![](https://img.shields.io/github/license/piotrulos/MSCModLoader.svg?style=flat-square)](#) 
 
-# FreeMSCLoader
-A mod loader for My Summer Car but it actually follows its own license. 
+# MSCLoader
+A mod loader for My Summer Car 
 
-[You can view the one that breaks its own license here.](https://github.com/piotrulos/MSCModLoader)
-
-## How does it break the license?
-
-- **The project communicates with a web server, which you don't have any access to, is closed-source and you don't know what it's doing**. On top of that, all of the communication between the server and your MSC client is **unencrypted**, going over **HTTP**. **NOT HTTPS!** **Your literal MSCLoader token is transferred unencrypted**, making it **susceptible for a man-in-the-middle attack**. If you interact with publishing mods, your token has the possibility of getting into somebody else's hands, and **this could be really bad**. **The hacker could go ahead and replace your mods that you have published on MSCLoader with viruses and this will quickly spread**. HTTPS certificates are literally free nowadays. Let alone that not giving users the source code of the webserver is also a license violation.
-
-This project fixes these problems, by nuking any interaction with the server whatsoever.
-
-## FAQ
-
-- **Q: How do I get mod updates?**: NexusMods helps you tell apart mods that have gotten updates by adding a visible orange badge saying "Update Available". By downloading the new version and replacing it in the mods folder, you update the mod. Mod updates aren't that frequent for you to have to update every 10 minutes.
-
-## Reporting issues
-Please report any issues and ideas [here](https://github.com/piotrulos/MSCModLoader/issues). This project is afterall a soft fork, meaning that I will pull changes in here.
+Please report any issues and ideas [here](https://github.com/piotrulos/MSCModLoader/issues)
 
 **Example Mods** - this folder contains example mods source files (see documentation how to use them)  
 **Visual Studio templates** - this folder contains templates for Visual Studio for easy mod creation. (see documentation how to use them)  
@@ -26,10 +13,15 @@ Please report any issues and ideas [here](https://github.com/piotrulos/MSCModLoa
 A documentation for MSCLoader is avaliable [here](https://github.com/piotrulos/MSCModLoader/wiki) (for modders and users)  
 
 ## Installation
-1. Clone this project
-2. Build it from source (Unlike regular MSCLoader, can be built without needing MSCLoaderCore!)
-3. Install regular MSCLoader
-4. Copy MSCLoader.dll from Release folder to 
+1. Download the latest release of MSCLoader from [here](https://github.com/piotrulos/MSCModLoader/releases)
+2. Unpack anywhere you want **(DO NOT unpack into any game folders)**
+3. Open MSCLInstaller.exe
+4. If MSC path wasn't found automatically, select path manually.
+5. Select "Install MSCLoader" and click "Select option" button
+6. Select whatever path you want to be your Mods folder (Game Folder is recommended)
+7. Wait for install to finish
+8. Unpack downloaded mods in the Mods folder you selected and you are ready!
+
 ## License
 MSCLoader is licensed under **GNU General Public License v3.0 (GPL v3)**   
 If you want to port this to other games make sure to link original reposity in your credits and keep it under same license (open-source).
@@ -38,16 +30,14 @@ If you want to port this to other games make sure to link original reposity in y
 * [NAudio](https://github.com/naudio/NAudio)/[NVorbis](https://github.com/ioctlLR/NVorbis) - **MIT License (MIT)**    
 * [Ionic.Zip](https://archive.codeplex.com/?p=dotnetzip) (DotNetZip) - **Microsoft Public License (Ms-PL)**   
 * [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) - **MIT License (MIT)**    
-* [UnityDoorstop](https://github.com/NeighTools/UnityDoorstop) - **CC0 (Public Domain)**    
+* [UnityDoorstop](https://github.com/NeighTools/UnityDoorstop) - v3 - **CC0 (Public Domain)** / v4 - **LGPL-2.1 license (LGPL-2.1)**   
 * [INIFileParser](https://github.com/rickyah/ini-parser) - **MIT License (MIT)**    
 
 ## Like My Work?
-If you want you can buy the original developer a beer :)
+If you want you can buy me a beer :)   
 Paypal: [Paypal.me](https://www.paypal.me/piotrulos/0eur)  
-BTC: 1NLRvUXHLhuLz5erVWyXdY7i8KmfCSjJgP
+BTC: 1NLRvUXHLhuLz5erVWyXdY7i8KmfCSjJgP  
 Thanks for all donations, even small ammount helps.
-
-If you want to buy **ME** a coffee, go ahead and do that [here](https://mldchan.dev/donate)
 
 #### Credit
 * **djoe45** for MSCLoader v0.1 that was based on **Longwelwind** and **TheNoob454** work ([PhiPatcher](https://github.com/Longwelwind/PhiScript) and [PBLoader](https://github.com/TheNoob454/PBLoader))    

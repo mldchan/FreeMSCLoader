@@ -8,7 +8,7 @@ using System.Linq;
 // No need to reset game for some mods.
 namespace MSCLoader;
 
-public class MSCUnloader : MonoBehaviour
+internal class MSCUnloader : MonoBehaviour
 {
     internal static Queue<string> dm_pcon;
     private bool doReset;

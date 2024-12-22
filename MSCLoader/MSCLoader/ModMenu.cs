@@ -1,38 +1,32 @@
 ﻿#if !Mini
+using IniParser;
+using IniParser.Model;
+using Newtonsoft.Json;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using MSCLoader;
-using IniParser;
-using Newtonsoft.Json;
 
 namespace MSCLoader;
 
 internal class ModMenu : Mod
 {
-    internal static byte cfmu_set;
-    internal static ModMenu instance;
-    internal static SettingsCheckBox dm_disabler, dm_logST, dm_operr, dm_warn, dm_pcon;
-
-    internal static SettingsCheckBox expWarning,
-        modPath,
-        forceMenuVsync,
-        openLinksOverlay,
-        skipGameIntro,
-        skipConfigScreen;
-    
-    private FileVersionInfo coreVer;
-
-    internal GameObject UI;
     public override string ID => "MSCLoader_Settings";
     public override string Name => "[INTERNAL] Mod Menu";
-    public override string Version => ModLoader.FreeLoader_Ver;
-    public override string Author => "piotrulos";
+    public override string Version => ModLoader.MSCLoader_Ver;
+    public override string Author => "MSCLoader";
+
+    internal GameObject UI;
+    internal static byte cfmu_set = 0;
+    internal static ModMenu instance;
+    internal static SettingsCheckBox dm_disabler, dm_logST, dm_operr, dm_warn, dm_pcon;
+    internal static SettingsCheckBox expWarning, modPath, forceMenuVsync, openLinksOverlay, skipGameIntro, skipConfigScreen;
+
+    private static SettingsCheckBoxGroup checkLaunch, checkDaily, checkWeekly;
+    private System.Diagnostics.FileVersionInfo coreVer;
 
     public override void ModSetup()
     {
+        instance = this;
         SetupFunction(Setup.OnMenuLoad, Mod_OnMenuLoad);
         SetupFunction(Setup.ModSettings, Mod_Settings);
         SetupFunction(Setup.ModSettingsLoaded, Mod_SettingsLoaded);
@@ -40,60 +34,58 @@ internal class ModMenu : Mod
 
     private void Mod_Settings()
     {
-        instance = this;
         Settings.ModSettings(this);
         if (ModLoader.devMode)
         {
-            Settings.AddHeader(this, "DevMode Settings", new Color32(0, 0, 128, 255), Color.green);
-            dm_disabler = Settings.AddCheckBox(this, "MSCLoader_dm_disabler", "Disable mods throwing errors");
-            dm_logST = Settings.AddCheckBox(this, "MSCLoader_dm_logST", "Log-all stack trace (not recommended)");
-            dm_operr = Settings.AddCheckBox(this, "MSCLoader_dm_operr", "Log-all open console on error");
-            dm_warn = Settings.AddCheckBox(this, "MSCLoader_dm_warn", "Log-all open console on warning");
-            dm_pcon = Settings.AddCheckBox(this, "MSCLoader_dm_pcon", "Persistent console (sometimes may break font)");
+            Settings.AddHeader("DevMode Settings", new Color32(0, 0, 128, 255), Color.green);
+            dm_disabler = Settings.AddCheckBox("MSCLoader_dm_disabler", "Disable mods throwing errors", false);
+            dm_logST = Settings.AddCheckBox("MSCLoader_dm_logST", "Log-all stack trace (not recommended)", false);
+            dm_operr = Settings.AddCheckBox("MSCLoader_dm_operr", "Log-all open console on error", false);
+            dm_warn = Settings.AddCheckBox("MSCLoader_dm_warn", "Log-all open console on warning", false);
+            dm_pcon = Settings.AddCheckBox("MSCLoader_dm_pcon", "Persistent console (sometimes may break font)", false);
         }
+        Settings.AddHeader("Basic Settings");
+        expWarning = Settings.AddCheckBox("MSCLoader_expWarning", "Show experimental warning (experimental branch on Steam)", true);
+        modPath = Settings.AddCheckBox("MSCLoader_modPath", "Show mods folder (top left corner)", true, ModLoader.MainMenuPath);
+        forceMenuVsync = Settings.AddCheckBox("MSCLoader_forceMenuVsync", "60 FPS limit in Main Menu", true, VSyncSwitchCheckbox);
+        openLinksOverlay = Settings.AddCheckBox("MSCLoader_openLinksOverlay", "Open URLs in Steam overlay", true);
+        Settings.AddText("Skip stuff:");
+        skipGameIntro = Settings.AddCheckBox("MSCLoader_skipGameIntro", "Skip game splash screen", false, SkipIntroSet);
+        skipConfigScreen = Settings.AddCheckBox("MSCLoader_skipConfigScreen", "Skip configuration screen", false, SkipConfigScreen);
 
-        Settings.AddHeader(this, "Basic Settings");
-        expWarning = Settings.AddCheckBox(this, "MSCLoader_expWarning",
-            "Show experimental warning (experimental branch on Steam)", true);
-        modPath = Settings.AddCheckBox(this, "MSCLoader_modPath", "Show mods folder (top left corner)", true,
-            ModLoader.MainMenuPath);
-        forceMenuVsync = Settings.AddCheckBox(this, "MSCLoader_forceMenuVsync", "60 FPS limit in Main Menu", true,
-            VSyncSwitchCheckbox);
-        openLinksOverlay = Settings.AddCheckBox(this, "MSCLoader_openLinksOverlay", "Open URLs in Steam overlay", true);
-        Settings.AddText(this, "Skip stuff:");
-        skipGameIntro = Settings.AddCheckBox(this, "MSCLoader_skipGameIntro", "Skip game splash screen", false,
-            SkipIntroSet);
-        skipConfigScreen = Settings.AddCheckBox(this, "MSCLoader_skipConfigScreen", "Skip configuration screen", false,
-            SkipConfigScreen);
+        Settings.AddHeader("Update Settings");
+        Settings.AddText("How often MSCLoader checks for Mod/References updates.");
+        checkLaunch = Settings.AddCheckBoxGroup("MSCLoader_checkOnLaunch", "Every launch", true, "cfmu_set");
+        checkDaily = Settings.AddCheckBoxGroup("MSCLoader_checkEveryDay", "Daily", false, "cfmu_set");
+        checkWeekly = Settings.AddCheckBoxGroup("MSCLoader_checkEveryWeek", "Weekly", false, "cfmu_set");
 
-        Settings.AddHeader(this, "FreeLoader Credits", Color.black);
-        Settings.AddText(this, "All source code contributors and used libraries are listed on GitHub");
-        Settings.AddText(this,
-            "<color=pink>Freedom by mldchan!</color> <color=cyan>tr</color><color=#ff77ff>an</color>s r<color=#ff77ff>ig</color><color=cyan>hts</color>");
-        Settings.AddText(this, "Non-GitHub contributions:");
-        Settings.AddText(this,
-            "<color=aqua>BrennFuchS</color> - New default mod icon and expanded PlayMaker extensions.");
+        Settings.AddHeader("MSCLoader Credits", Color.black);
+        Settings.AddText("All source code contributors and used libraries are listed on GitHub");
+        Settings.AddText("Non-GitHub contributions:");
+        Settings.AddText("<color=aqua>BrennFuchS</color> - New default mod icon and expanded PlayMaker extensions.");
 
-        Settings.AddHeader(this, "Detailed Version Information", new Color32(0, 128, 0, 255));
-        coreVer = FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"),
-            "MSCLoader.Preloader.dll"));
-        Settings.AddText(this,
-            $"FreeLoader modules:{Environment.NewLine}<color=yellow>FreeLoader.Preloader</color>: <color=aqua>v{coreVer.FileMajorPart}.{coreVer.FileMinorPart}.{coreVer.FileBuildPart} build {coreVer.FilePrivatePart}</color>{Environment.NewLine}<color=yellow>FreeLoader</color>: <color=aqua>v{ModLoader.FreeLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
-        Settings.AddText(this,
-            $"Build-in libraries:{Environment.NewLine}<color=yellow>Harmony</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "0Harmony.dll")).FileVersion}</color>{Environment.NewLine}" +
-            $"<color=yellow>Ionic.Zip</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "Ionic.Zip.dll")).FileVersion}</color>{Environment.NewLine}" +
-            $"<color=yellow>NAudio</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "NAudio.dll")).FileVersion}</color>{Environment.NewLine}" +
-            $"<color=yellow>NAudio (Vorbis)</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "NVorbis.dll")).FileVersion}</color>{Environment.NewLine}" +
-            $"<color=yellow>NAudio (Flac)</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "NAudio.Flac.dll")).FileVersion}</color>{Environment.NewLine}" +
-            $"<color=yellow>Newtonsoft.Json</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "Newtonsoft.Json.dll")).FileVersion}</color>{Environment.NewLine}" +
-            $"<color=yellow>INIFileParser</color>: <color=aqua>v{FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "INIFileParser.dll")).FileVersion}</color>");
+        Settings.AddHeader("Detailed Version Information", new Color32(0, 128, 0, 255));
+        coreVer = System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "MSCLoader.Preloader.dll"));
+        SettingsText modulesVer = Settings.AddText($"MSCLoader modules:{Environment.NewLine}<color=yellow>MSCLoader.Preloader</color>: <color=aqua>v{coreVer.FileMajorPart}.{coreVer.FileMinorPart}.{coreVer.FileBuildPart} build {coreVer.FilePrivatePart}</color>{Environment.NewLine}<color=yellow>MSCLoader</color>: <color=aqua>v{ModLoader.MSCLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
+        if (File.Exists(Path.Combine(ModLoader.ModsFolder, Path.Combine("References", "MSCCoreLibrary.dll"))))
+        {
+            System.Diagnostics.FileVersionInfo libVer = System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.Combine(ModLoader.ModsFolder, Path.Combine("References", "MSCCoreLibrary.dll")));
+            modulesVer.SetValue(modulesVer.GetValue() + $"{Environment.NewLine}<color=yellow>MSCCoreLibrary</color>: <color=aqua>v{libVer.FileMajorPart}.{libVer.FileMinorPart}.{libVer.FileBuildPart} build {libVer.FilePrivatePart}</color>");
+        }
+        Settings.AddText($"Build-in libraries:{Environment.NewLine}<color=yellow>Harmony</color>: <color=aqua>v{System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "0Harmony.dll")).FileVersion}</color>{Environment.NewLine}" +
+            $"<color=yellow>Ionic.Zip</color>: <color=aqua>v{System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "Ionic.Zip.dll")).FileVersion}</color>{Environment.NewLine}" +
+            $"<color=yellow>NAudio</color>: <color=aqua>v{System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "NAudio.dll")).FileVersion}</color>{Environment.NewLine}" +
+            $"<color=yellow>NAudio (Vorbis)</color>: <color=aqua>v{System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "NVorbis.dll")).FileVersion}</color>{Environment.NewLine}" +
+            $"<color=yellow>NAudio (Flac)</color>: <color=aqua>v{System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "NAudio.Flac.dll")).FileVersion}</color>{Environment.NewLine}" +
+            $"<color=yellow>Newtonsoft.Json</color>: <color=aqua>v{System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "Newtonsoft.Json.dll")).FileVersion}</color>{Environment.NewLine}" +
+            $"<color=yellow>INIFileParser</color>: <color=aqua>v{System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.Combine(Path.Combine("mysummercar_Data", "Managed"), "INIFileParser.dll")).FileVersion}</color>");
     }
 
     private void Mod_SettingsLoaded()
     {
-        var ini = new FileIniDataParser().ReadFile("doorstop_config.ini");
-        var skipIntro = ini["MSCLoader"]["skipIntro"];
-        var skipCfg = ini["MSCLoader"]["skipConfigScreen"];
+        IniData ini = new FileIniDataParser().ReadFile("doorstop_config.ini");
+        string skipIntro = ini["MSCLoader"]["skipIntro"];
+        string skipCfg = ini["MSCLoader"]["skipConfigScreen"];
         bool introSkip, configSkip;
         if (!bool.TryParse(skipIntro, out introSkip))
         {
@@ -104,7 +96,6 @@ internal class ModMenu : Mod
         {
             skipGameIntro.SetValue(introSkip);
         }
-
         if (!bool.TryParse(skipCfg, out configSkip))
         {
             skipConfigScreen.SetValue(false);
@@ -114,34 +105,34 @@ internal class ModMenu : Mod
         {
             skipConfigScreen.SetValue(configSkip);
         }
-
-        cfmu_set = 7;
+        if (checkLaunch.GetValue())
+            cfmu_set = 0;
+        else if (checkDaily.GetValue())
+            cfmu_set = 1;
+        else if (checkWeekly.GetValue())
+            cfmu_set = 7;
     }
 
     private void SkipIntroSet()
     {
-        var parser = new FileIniDataParser();
-        var ini = parser.ReadFile("doorstop_config.ini");
+        FileIniDataParser parser = new FileIniDataParser();
+        IniData ini = parser.ReadFile("doorstop_config.ini");
         ini["MSCLoader"]["skipIntro"] = skipGameIntro.GetValue().ToString().ToLower();
-        parser.WriteFile("doorstop_config.ini", ini, Encoding.ASCII);
+        parser.WriteFile("doorstop_config.ini", ini, System.Text.Encoding.ASCII);
     }
 
     private void SkipConfigScreen()
     {
         if (coreVer.FilePrivatePart < 263)
         {
-            ModUI.ShowMessage(
-                "To use <color=yellow>Skip Configuration Screen</color> you need to update the core module of FreeLoader, download the latest version and launch <color=aqua>MSCPatcher.exe</color> to update",
-                "Outdated module");
+            ModUI.ShowMessage("To use <color=yellow>Skip Configuration Screen</color> you need to update the core module of MSCLoader, download latest version and launch <color=aqua>MSCLInstaller.exe</color> to update", "Outdated module");
             return;
         }
-
-        var parser = new FileIniDataParser();
-        var ini = parser.ReadFile("doorstop_config.ini");
+        FileIniDataParser parser = new FileIniDataParser();
+        IniData ini = parser.ReadFile("doorstop_config.ini");
         ini["MSCLoader"]["skipConfigScreen"] = skipConfigScreen.GetValue().ToString().ToLower();
-        parser.WriteFile("doorstop_config.ini", ini, Encoding.ASCII);
+        parser.WriteFile("doorstop_config.ini", ini, System.Text.Encoding.ASCII);
     }
-
     private static void VSyncSwitchCheckbox()
     {
         if (ModLoader.GetCurrentScene() == CurrentScene.MainMenu)
@@ -153,7 +144,7 @@ internal class ModMenu : Mod
         }
     }
 
-    private void Mod_OnMenuLoad()
+    void Mod_OnMenuLoad()
     {
         try
         {
@@ -161,20 +152,19 @@ internal class ModMenu : Mod
         }
         catch (Exception e)
         {
-            ModUI.ShowMessage(
-                $"Fatal error:{Environment.NewLine}<color=orange>{e.Message}</color>{Environment.NewLine}Please install FreeLoader correctly.",
-                "Fatal Error");
+            ModUI.ShowMessage($"Fatal error:{Environment.NewLine}<color=orange>{e.Message}</color>{Environment.NewLine}Please install MSCLoader correctly.", "Fatal Error");
         }
     }
 
     public void CreateSettingsUI()
     {
-        var ab = LoadAssets.LoadBundle(this, "settingsui.unity3d");
-        var UIp = ab.LoadAsset<GameObject>("MSCLoader Canvas menu.prefab");
+        AssetBundle ab = LoadAssets.LoadBundle(this, "settingsui.unity3d");
+        GameObject UIp = ab.LoadAsset<GameObject>("MSCLoader Canvas menu.prefab");
         UI = GameObject.Instantiate(UIp);
         GameObject.DontDestroyOnLoad(UI);
         GameObject.Destroy(UIp);
         ab.Unload(false);
+        ModUI.popupSettingController = UI.GetComponent<PopupSettingController>();
     }
 
     // Reset keybinds
@@ -183,10 +173,10 @@ internal class ModMenu : Mod
         if (mod != null)
         {
             // Revert binds
-            var bind = Keybind.Get(mod).ToArray();
-            for (var i = 0; i < bind.Length; i++)
+            Keybind[] bind = Keybind.Get(mod).ToArray();
+            for (int i = 0; i < bind.Length; i++)
             {
-                var original = Keybind.GetDefault(mod).Find(x => x.ID == bind[i].ID);
+                Keybind original = Keybind.GetDefault(mod).Find(x => x.ID == bind[i].ID);
 
                 if (original != null)
                 {
@@ -204,22 +194,26 @@ internal class ModMenu : Mod
     // Save all keybinds to config files.
     public static void SaveAllBinds()
     {
-        for (var i = 0; i < ModLoader.LoadedMods.Count; i++) SaveModBinds(ModLoader.LoadedMods[i]);
+        for (int i = 0; i < ModLoader.LoadedMods.Count; i++)
+        {
+            SaveModBinds(ModLoader.LoadedMods[i]);
+        }
     }
 
 
     // Save keybind for a single mod to config file.
     public static void SaveModBinds(Mod mod)
     {
-        var list = new KeybindList();
-        var path = Path.Combine(ModLoader.GetModSettingsFolder(mod), "keybinds.json");
 
-        var binds = Keybind.Get(mod).ToArray();
-        for (var i = 0; i < binds.Length; i++)
+        KeybindList list = new KeybindList();
+        string path = Path.Combine(ModLoader.GetModSettingsFolder(mod), "keybinds.json");
+
+        Keybind[] binds = Keybind.Get(mod).ToArray();
+        for (int i = 0; i < binds.Length; i++)
         {
             if (binds[i].ID == null || binds[i].Vals != null)
                 continue;
-            var keybinds = new Keybinds
+            Keybinds keybinds = new Keybinds
             {
                 ID = binds[i].ID,
                 Key = binds[i].Key,
@@ -228,57 +222,61 @@ internal class ModMenu : Mod
 
             list.keybinds.Add(keybinds);
         }
-
-        var serializedData = JsonConvert.SerializeObject(list, Formatting.Indented);
+        string serializedData = JsonConvert.SerializeObject(list, Formatting.Indented);
         File.WriteAllText(path, serializedData);
+
     }
 
     // Reset settings
     public static void ResetSettings(Mod mod)
     {
         if (mod == null) return;
-        for (var i = 0; i < Settings.Get(mod).Count; i++) ResetSpecificSetting(Settings.Get(mod)[i]);
+        for (int i = 0; i < Settings.GetModSettings(mod).Count; i++)
+        {
+            ResetSpecificSetting(Settings.GetModSettings(mod)[i]);
+        }
         SaveSettings(mod);
     }
-
     internal static void ResetSpecificSetting(ModSetting set)
     {
         switch (set.SettingType)
         {
             case SettingsType.CheckBoxGroup:
-                var scbg = (SettingsCheckBoxGroup)set;
+                SettingsCheckBoxGroup scbg = (SettingsCheckBoxGroup)set;
                 scbg.Value = scbg.DefaultValue;
                 scbg.IsVisible = scbg.DefaultVisibility;
                 break;
             case SettingsType.CheckBox:
-                var scb = (SettingsCheckBox)set;
+                SettingsCheckBox scb = (SettingsCheckBox)set;
                 scb.Value = scb.DefaultValue;
                 scb.IsVisible = scb.DefaultVisibility;
                 break;
             case SettingsType.Slider:
-                var ss = (SettingsSlider)set;
+                SettingsSlider ss = (SettingsSlider)set;
                 ss.Value = ss.DefaultValue;
                 ss.IsVisible = ss.DefaultVisibility;
                 break;
             case SettingsType.SliderInt:
-                var ssi = (SettingsSliderInt)set;
+                SettingsSliderInt ssi = (SettingsSliderInt)set;
                 ssi.Value = ssi.DefaultValue;
                 ssi.IsVisible = ssi.DefaultVisibility;
                 break;
             case SettingsType.TextBox:
-                var stb = (SettingsTextBox)set;
+                SettingsTextBox stb = (SettingsTextBox)set;
                 stb.Value = stb.DefaultValue;
                 stb.IsVisible = stb.DefaultVisibility;
                 break;
             case SettingsType.DropDown:
-                var sddl = (SettingsDropDownList)set;
+                SettingsDropDownList sddl = (SettingsDropDownList)set;
                 sddl.Value = sddl.DefaultValue;
                 sddl.IsVisible = sddl.DefaultVisibility;
                 break;
             case SettingsType.ColorPicker:
-                var scp = (SettingsColorPicker)set;
+                SettingsColorPicker scp = (SettingsColorPicker)set;
                 scp.Value = scp.DefaultColorValue;
                 scp.IsVisible = scp.DefaultVisibility;
+                break;
+            default:
                 break;
         }
     }
@@ -286,12 +284,13 @@ internal class ModMenu : Mod
     // Save settings for a single mod to config file.
     internal static void SaveSettings(Mod mod)
     {
-        var list = new SettingsList();
+        SettingsList list = new SettingsList();
         list.isDisabled = mod.isDisabled;
-        var path = Path.Combine(ModLoader.GetModSettingsFolder(mod), "settings.json");
+        string path = Path.Combine(ModLoader.GetModSettingsFolder(mod), "settings.json");
 
-        for (var i = 0; i < Settings.Get(mod).Count; i++)
-            switch (Settings.Get(mod)[i].SettingType)
+        for (int i = 0; i < Settings.GetModSettings(mod).Count; i++)
+        {
+            switch (Settings.GetModSettings(mod)[i].SettingType)
             {
                 case SettingsType.Button:
                 case SettingsType.RButton:
@@ -299,60 +298,61 @@ internal class ModMenu : Mod
                 case SettingsType.Text:
                     continue;
                 case SettingsType.CheckBoxGroup:
-                    var group = (SettingsCheckBoxGroup)Settings.Get(mod)[i];
+                    SettingsCheckBoxGroup group = (SettingsCheckBoxGroup)Settings.GetModSettings(mod)[i];
                     list.settings.Add(new Setting(group.ID, group.Value));
                     break;
                 case SettingsType.CheckBox:
-                    var check = (SettingsCheckBox)Settings.Get(mod)[i];
+                    SettingsCheckBox check = (SettingsCheckBox)Settings.GetModSettings(mod)[i];
                     list.settings.Add(new Setting(check.ID, check.Value));
                     break;
                 case SettingsType.Slider:
-                    var slider = (SettingsSlider)Settings.Get(mod)[i];
+                    SettingsSlider slider = (SettingsSlider)Settings.GetModSettings(mod)[i];
                     list.settings.Add(new Setting(slider.ID, slider.Value));
                     break;
                 case SettingsType.SliderInt:
-                    var sliderInt = (SettingsSliderInt)Settings.Get(mod)[i];
+                    SettingsSliderInt sliderInt = (SettingsSliderInt)Settings.GetModSettings(mod)[i];
                     list.settings.Add(new Setting(sliderInt.ID, sliderInt.Value));
                     break;
                 case SettingsType.TextBox:
-                    var textBox = (SettingsTextBox)Settings.Get(mod)[i];
+                    SettingsTextBox textBox = (SettingsTextBox)Settings.GetModSettings(mod)[i];
                     list.settings.Add(new Setting(textBox.ID, textBox.Value));
                     break;
                 case SettingsType.DropDown:
-                    var dropDown = (SettingsDropDownList)Settings.Get(mod)[i];
+                    SettingsDropDownList dropDown = (SettingsDropDownList)Settings.GetModSettings(mod)[i];
                     list.settings.Add(new Setting(dropDown.ID, dropDown.Value));
                     break;
                 case SettingsType.ColorPicker:
-                    var colorPicker = (SettingsColorPicker)Settings.Get(mod)[i];
+                    SettingsColorPicker colorPicker = (SettingsColorPicker)Settings.GetModSettings(mod)[i];
                     list.settings.Add(new Setting(colorPicker.ID, colorPicker.Value));
                     break;
             }
+        }
 
-        var serializedData = JsonConvert.SerializeObject(list, Formatting.Indented);
+        string serializedData = JsonConvert.SerializeObject(list, Formatting.Indented);
         File.WriteAllText(path, serializedData);
+
     }
 
     // Load all keybinds.
     public static void LoadBinds()
     {
-        var binds = ModLoader.LoadedMods.Where(mod => Keybind.Get(mod).Count > 0).ToArray();
-        for (var i = 0; i < binds.Length; i++)
+        Mod[] binds = ModLoader.LoadedMods.Where(mod => Keybind.Get(mod).Count > 0).ToArray();
+        for (int i = 0; i < binds.Length; i++)
         {
             // Check if there is custom keybinds file (if not, create)
-            var path = Path.Combine(ModLoader.GetModSettingsFolder(binds[i]), "keybinds.json");
+            string path = Path.Combine(ModLoader.GetModSettingsFolder(binds[i]), "keybinds.json");
             if (!File.Exists(path))
             {
                 SaveModBinds(binds[i]);
                 continue;
             }
-
             //Load and deserialize 
-            var keybinds = JsonConvert.DeserializeObject<KeybindList>(File.ReadAllText(path));
+            KeybindList keybinds = JsonConvert.DeserializeObject<KeybindList>(File.ReadAllText(path));
             if (keybinds.keybinds.Count == 0)
                 continue;
-            for (var k = 0; k < keybinds.keybinds.Count; k++)
+            for (int k = 0; k < keybinds.keybinds.Count; k++)
             {
-                var bind = binds[i].Keybinds.Find(x => x.ID == keybinds.keybinds[k].ID);
+                Keybind bind = binds[i].Keybinds.Find(x => x.ID == keybinds.keybinds[k].ID);
                 if (bind == null)
                     continue;
                 bind.Key = keybinds.keybinds[k].Key;
@@ -364,22 +364,24 @@ internal class ModMenu : Mod
     // Load all settings.
     internal static void LoadSettings()
     {
-        for (var i = 0; i < ModLoader.LoadedMods.Count; i++)
+        for (int i = 0; i < ModLoader.LoadedMods.Count; i++)
         {
             // Check if there is custom settings file (if not, ignore)
-            var path = Path.Combine(ModLoader.GetModSettingsFolder(ModLoader.LoadedMods[i]), "settings.json");
+            string path = Path.Combine(ModLoader.GetModSettingsFolder(ModLoader.LoadedMods[i]), "settings.json");
             if (!File.Exists(path))
                 SaveSettings(ModLoader.LoadedMods[i]); //create settings file if not exists.
-            //Load and deserialize 
-            var settings = JsonConvert.DeserializeObject<SettingsList>(File.ReadAllText(path));
+                                                       //Load and deserialize 
+            SettingsList settings = JsonConvert.DeserializeObject<SettingsList>(File.ReadAllText(path));
             ModLoader.LoadedMods[i].isDisabled = settings.isDisabled;
             if (!ModLoader.LoadedMods[i].isDisabled)
+            {
                 try
                 {
                     if (ModLoader.LoadedMods[i].newFormat && ModLoader.LoadedMods[i].fileName != null)
                     {
                         if (ModLoader.LoadedMods[i].A_OnMenuLoad != null)
                         {
+                            Console.WriteLine($"Calling OnMenuLoad (for mod {ModLoader.LoadedMods[i].ID})");
                             ModLoader.LoadedMods[i].A_OnMenuLoad.Invoke();
                             ModLoader.LoadedMods[i].disableWarn = true;
                         }
@@ -388,12 +390,13 @@ internal class ModMenu : Mod
                     {
                         if (ModLoader.LoadedMods[i].LoadInMenu && ModLoader.LoadedMods[i].fileName != null)
                         {
+                            Console.WriteLine($"Calling OnMenuLoad [old format] (for mod {ModLoader.LoadedMods[i].ID})");
                             ModLoader.LoadedMods[i].OnMenuLoad();
                             ModLoader.LoadedMods[i].disableWarn = true;
                         }
-
                         if (ModLoader.CheckEmptyMethod(ModLoader.LoadedMods[i], "MenuOnLoad"))
                         {
+                            Console.WriteLine($"Calling OnMenuLoad [old format pro] (for mod {ModLoader.LoadedMods[i].ID})");
                             ModLoader.LoadedMods[i].MenuOnLoad();
                             ModLoader.LoadedMods[i].disableWarn = true;
                         }
@@ -403,13 +406,13 @@ internal class ModMenu : Mod
                 {
                     ModLoader.ModException(e, ModLoader.LoadedMods[i]);
                 }
-
-            if (Settings.Get(ModLoader.LoadedMods[i]).Count == 0)
+            }
+            if (Settings.GetModSettings(ModLoader.LoadedMods[i]).Count == 0)
                 continue;
 
-            for (var j = 0; j < settings.settings.Count; j++)
+            for (int j = 0; j < settings.settings.Count; j++)
             {
-                var ms = Settings.Get(ModLoader.LoadedMods[i]).Find(x => x.ID == settings.settings[j].ID);
+                ModSetting ms = Settings.GetModSettings(ModLoader.LoadedMods[i]).Find(x => x.ID == settings.settings[j].ID);
                 if (ms == null)
                     continue;
                 switch (ms.SettingType)
@@ -420,36 +423,35 @@ internal class ModMenu : Mod
                     case SettingsType.Text:
                         continue;
                     case SettingsType.CheckBoxGroup:
-                        var group = (SettingsCheckBoxGroup)ms;
+                        SettingsCheckBoxGroup group = (SettingsCheckBoxGroup)ms;
                         group.SetValue(bool.Parse(settings.settings[j].Value.ToString()));
                         break;
                     case SettingsType.CheckBox:
-                        var check = (SettingsCheckBox)ms;
+                        SettingsCheckBox check = (SettingsCheckBox)ms;
                         check.SetValue(bool.Parse(settings.settings[j].Value.ToString()));
                         break;
                     case SettingsType.Slider:
-                        var slider = (SettingsSlider)ms;
+                        SettingsSlider slider = (SettingsSlider)ms;
                         slider.SetValue(float.Parse(settings.settings[j].Value.ToString()));
                         break;
                     case SettingsType.SliderInt:
-                        var sliderInt = (SettingsSliderInt)ms;
+                        SettingsSliderInt sliderInt = (SettingsSliderInt)ms;
                         sliderInt.SetValue(int.Parse(settings.settings[j].Value.ToString()));
                         break;
                     case SettingsType.TextBox:
-                        var textBox = (SettingsTextBox)ms;
+                        SettingsTextBox textBox = (SettingsTextBox)ms;
                         textBox.SetValue(settings.settings[j].Value.ToString());
                         break;
                     case SettingsType.DropDown:
-                        var dropDown = (SettingsDropDownList)ms;
+                        SettingsDropDownList dropDown = (SettingsDropDownList)ms;
                         dropDown.SetSelectedItemIndex(int.Parse(settings.settings[j].Value.ToString()));
                         break;
                     case SettingsType.ColorPicker:
-                        var colorPicker = (SettingsColorPicker)ms;
+                        SettingsColorPicker colorPicker = (SettingsColorPicker)ms;
                         colorPicker.Value = settings.settings[j].Value.ToString();
                         break;
                 }
             }
-
             try
             {
                 if (!ModLoader.LoadedMods[i].isDisabled)
@@ -457,12 +459,12 @@ internal class ModMenu : Mod
                     if (ModLoader.LoadedMods[i].newSettingsFormat)
                     {
                         if (ModLoader.LoadedMods[i].A_ModSettingsLoaded != null)
+                        {
                             ModLoader.LoadedMods[i].A_ModSettingsLoaded.Invoke();
+                        }
                     }
                     else
-                    {
                         ModLoader.LoadedMods[i].ModSettingsLoaded();
-                    }
                 }
             }
             catch (Exception e)
@@ -474,23 +476,20 @@ internal class ModMenu : Mod
 
     internal static void ModMenuHandle()
     {
-        GameObject.Find("Systems").transform.Find("OptionsMenu").gameObject.AddComponent<ModMenuHandler>().modMenuUI =
-            instance.UI.transform.GetChild(0).gameObject;
+        GameObject.Find("Systems").transform.Find("OptionsMenu").gameObject.AddComponent<ModMenuHandler>().modMenuUI = instance.UI.transform.GetChild(0).gameObject;
         instance.UI.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public class ModMenuHandler : MonoBehaviour
     {
         public GameObject modMenuUI;
-        private bool isApplicationQuitting;
-
-        private void OnEnable()
+        private bool isApplicationQuitting = false;
+        void OnEnable()
         {
             modMenuUI.SetActive(true);
             //    StartCoroutine(CursorPM());
         }
-
-        private void OnDisable()
+        void OnDisable()
         {
             if (isApplicationQuitting) return;
             modMenuUI.SetActive(false);
@@ -500,8 +499,7 @@ internal class ModMenu : Mod
                 SaveSettings(ModLoader.LoadedMods[1]);
             }
         }
-
-        private void OnApplicationQuit()
+        void OnApplicationQuit()
         {
             isApplicationQuitting = true;
         }

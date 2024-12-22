@@ -26,7 +26,6 @@ internal class MSCLoaderCanvasLoading : MonoBehaviour
         else
             modUpdateUI.transform.localScale = new Vector3(1, 1, 1);
         StartCoroutine(UpdateUIAnim(toggle));
-        //   ModConsole.Warning("Update UI " + toggle);
     }
 
     public void ToggleLoadingUI(bool toggle)
