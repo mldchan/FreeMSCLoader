@@ -97,7 +97,6 @@ internal class ModMenuView : MonoBehaviour
         {
             GameObject mod = GameObject.Instantiate(UpdateElementPrefab);
             mod.GetComponent<MenuElementList>().mod = ModLoader.HasUpdateModList[i];
-            mod.GetComponent<MenuElementList>().UpdateInfoFill();
             mod.transform.SetParent(listView.transform, false);
             mod.SetActive(true);
         }
@@ -105,7 +104,6 @@ internal class ModMenuView : MonoBehaviour
         {
             GameObject mod = GameObject.Instantiate(UpdateElementPrefab);
             mod.GetComponent<MenuElementList>().refs = ModLoader.HasUpdateRefList[i];
-            mod.GetComponent<MenuElementList>().UpdateInfoFill();
             mod.transform.SetParent(listView.transform, false);
             mod.SetActive(true);
         }
@@ -325,7 +323,6 @@ internal class ModMenuView : MonoBehaviour
         SettingsElement uploadBtn = CreateButton(header4.HeaderListView.transform, "Upload and Update Mod", Color.white, Color.black);
         uploadBtn.button.onClick.AddListener(delegate
         {
-            ModMetadata.UploadUpdate(mod, assets, references, refList.ToArray());
         });
         uploadBtn.settingName.alignment = TextAnchor.MiddleLeft;
         uploadBtn.iconElement.texture = uploadBtn.iconPack[(int)SettingsButton.ButtonIcon.CloudArrow];
@@ -335,7 +332,6 @@ internal class ModMenuView : MonoBehaviour
         SettingsElement uploadBtn2 = CreateButton(header4.HeaderListView.transform, "Update Mod version only", Color.white, Color.black);
         uploadBtn2.button.onClick.AddListener(delegate
         {
-            ModMetadata.UpdateModVersionNumber(mod);
         });
         uploadBtn2.settingName.alignment = TextAnchor.MiddleLeft;
         uploadBtn2.iconElement.texture = uploadBtn2.iconPack[(int)SettingsButton.ButtonIcon.Update];

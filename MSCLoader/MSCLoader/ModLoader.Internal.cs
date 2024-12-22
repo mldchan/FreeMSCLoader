@@ -44,7 +44,7 @@ public partial class ModLoader
 
     internal int currentBuild = Assembly.GetExecutingAssembly().GetName().Version.Revision;
     internal int newBuild = 0;
-    internal string newVersion = MSCLoader_Ver;
+    internal string newVersion = FreeLoader_Ver;
     internal MSCUnloader mscUnloader;
 
     internal static string steamID;
@@ -56,17 +56,11 @@ public partial class ModLoader
     internal static string AssetsFolder = Path.Combine(ModsFolder, "Assets");
     internal string[] ModsUpdateDir;
     internal string[] RefsUpdateDir;
-    internal static List<string> ModSelfUpdateList = new List<string>();
-    internal static List<string> RefSelfUpdateList = new List<string>();
 
     internal List<string> MetadataUpdateList = new List<string>();
     internal GameObject mainMenuInfo;
     internal Animation menuInfoAnim;
     internal GUISkin guiskin;
-
-    internal static readonly string serverURL = "http://my-summer-car.ovh"; //Main url
-    internal static readonly string metadataURL = "man_v3/";
-    //internal static readonly string serverURL = "http://localhost/msc2"; //localhost for testing only
 
     internal bool IsModsLoading = false;
     internal bool allModsLoaded = false;

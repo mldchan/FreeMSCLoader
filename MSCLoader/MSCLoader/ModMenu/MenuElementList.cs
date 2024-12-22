@@ -2,7 +2,6 @@
 using System.Collections;
 using System.IO;
 using System.Linq;
-using System.Net;
 using UnityEngine.UI;
 
 namespace MSCLoader
@@ -213,123 +212,6 @@ namespace MSCLoader
             QuickInfo.text += $"<color=yellow>Version:</color> <color=aqua>{rf.AssemblyFileVersion}</color>{Environment.NewLine}";
             //  QuickInfo.text += $"<color=yellow>Guid test:</color> <color=aqua>{rf.Guid}</color>{Environment.NewLine}";
 
-        }
-        internal void ShowChangelog(string id, string ver, string name)
-        {
-            string dwl = string.Empty;
-            WebClient getdwl = new WebClient();
-            getdwl.Headers.Add("user-agent", $"MSCLoader/{ModLoader.MSCLoader_Ver} ({ModLoader.SystemInfoFix()})");
-            try
-            {
-                dwl = getdwl.DownloadString($"{ModLoader.serverURL}/changelog.php?mods={id}&vers={ver}&names={name}");
-            }
-            catch (Exception e)
-            {
-                dwl = "<color=red>Failed to download changelog...</color>";
-                Console.WriteLine(e);
-            }
-            ModUI.ShowChangelogWindow(dwl);
-        }
-        public void UpdateInfoFill()
-        {
-            if (refs != null)
-            {
-                Title.text = $"<color=lime>{refs.AssemblyTitle}</color>";
-                if (string.IsNullOrEmpty(refs.AssemblyAuthor))
-                    Author.text = $"by <color=orange>Unknown</color> (<color=aqua>{refs.AssemblyFileVersion}</color>)";
-                else
-                    Author.text = $"by <color=orange>{refs.AssemblyAuthor}</color> (<color=aqua>{refs.AssemblyFileVersion}</color>)";
-                if (string.IsNullOrEmpty(refs.AssemblyDescription))
-                    Description.text = "No description provided...";
-                else
-                    Description.text = refs.AssemblyDescription;
-                DownloadInfoTxt.text = $"Update available ({refs.UpdateInfo.ref_version})";
-                if (ModLoader.RefSelfUpdateList.Contains(refs.AssemblyID))
-                    DownloadUpdateBtn.onClick.AddListener(delegate
-                    {
-                        ModLoader.Instance.DownloadRefUpdate(refs);
-                    });
-                else
-                    DownloadUpdateBtn.gameObject.SetActive(false);
-                OpenDownloadWebsiteBtn.gameObject.SetActive(false);
-                MoreInfoBtn.onClick.AddListener(() => ShowChangelog(refs.AssemblyID, refs.UpdateInfo.ref_version, refs.AssemblyTitle));
-
-                icon.texture = ReferenceIcon;
-            }
-            if (mod != null)
-            {
-                Title.text = $"<color=lime>{mod.Name}</color>";
-                Author.text = $"by <color=orange>{mod.Author}</color> (<color=aqua>{mod.Version}</color>)";
-                DownloadInfoTxt.text = $"New Version ({mod.UpdateInfo.mod_version})";
-                if (ModLoader.ModSelfUpdateList.Contains(mod.ID))
-                    DownloadUpdateBtn.onClick.AddListener(delegate
-                    {
-                        ModLoader.Instance.DownloadModUpdate(mod);
-                    });
-                else
-                    DownloadUpdateBtn.gameObject.SetActive(false);
-                if (!string.IsNullOrEmpty(mod.metadata.description))
-                {
-                    if (string.IsNullOrEmpty(mod.Description))
-                        Description.text = mod.metadata.description;
-                }
-                if (!string.IsNullOrEmpty(mod.metadata.links[0]))
-                {
-                    OpenDownloadWebsiteBtn.onClick.AddListener(() => Application.OpenURL(mod.metadata.links[0]));
-                    MoreInfoBtn.onClick.AddListener(() => ShowChangelog(mod.ID, mod.UpdateInfo.mod_version, mod.Name));
-                }
-                else if (!string.IsNullOrEmpty(mod.metadata.links[2]))
-                {
-                    OpenDownloadWebsiteBtn.onClick.AddListener(() => Application.OpenURL(mod.metadata.links[2]));
-                    MoreInfoBtn.gameObject.SetActive(false);
-                }
-                else if (!string.IsNullOrEmpty(mod.metadata.links[1]))
-                {
-                    OpenDownloadWebsiteBtn.onClick.AddListener(() => Application.OpenURL(mod.metadata.links[1]));
-                    MoreInfoBtn.gameObject.SetActive(false);
-                }
-                else
-                {
-                    OpenDownloadWebsiteBtn.gameObject.SetActive(false);
-                    MoreInfoBtn.gameObject.SetActive(false);
-                }
-                if (!string.IsNullOrEmpty(mod.metadata.icon))
-                {
-                    if (File.Exists(Path.Combine(ModLoader.MetadataFolder, Path.Combine("Mod Icons", mod.metadata.icon))))
-                    {
-                        try
-                        {
-                            Texture2D t2d = new Texture2D(1, 1);
-                            t2d.LoadImage(File.ReadAllBytes(Path.Combine(ModLoader.MetadataFolder, Path.Combine("Mod Icons", mod.metadata.icon))));
-                            icon.texture = t2d;
-                        }
-                        catch (Exception e)
-                        {
-                            ModConsole.Error(e.Message);
-                            Console.WriteLine(e);
-                        }
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        if (mod.Icon != null)
-                        {
-                            Texture2D t2d = new Texture2D(1, 1);
-                            t2d.LoadImage(mod.Icon);
-                            icon.texture = t2d;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        ModConsole.Error(e.Message);
-                        Console.WriteLine(e);
-                    }
-
-                }
-
-            }
         }
 
         public void DisableThisMod(bool ischecked)

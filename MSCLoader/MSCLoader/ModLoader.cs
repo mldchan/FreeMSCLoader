@@ -30,7 +30,7 @@ public partial class ModLoader : MonoBehaviour
     /// <summary>
     /// The current version of the ModLoader.
     /// </summary>
-    public static readonly string MSCLoader_Ver;
+    public static readonly string FreeLoader_Ver;
 
     /// <summary>
     /// Is this version of ModLoader experimental (this is NOT game experimental branch)
@@ -49,9 +49,9 @@ public partial class ModLoader : MonoBehaviour
     static ModLoader()
     {
         if (Assembly.GetExecutingAssembly().GetName().Version.Build == 0)
-            MSCLoader_Ver = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}";
+            FreeLoader_Ver = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}";
         else
-            MSCLoader_Ver = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}";
+            FreeLoader_Ver = $"{Assembly.GetExecutingAssembly().GetName().Version.Major}.{Assembly.GetExecutingAssembly().GetName().Version.Minor}.{Assembly.GetExecutingAssembly().GetName().Version.Build}";
     }
     void Awake()
     {
@@ -126,7 +126,7 @@ public partial class ModLoader : MonoBehaviour
                     vse = true;
                 if (ModMenu.forceMenuVsync.GetValue() && !vse)
                     QualitySettings.vSyncCount = 1; //vsync in menu
-                if (GameObject.Find("MSCLoader Info") == null)
+                if (GameObject.Find("FreeLoader Info") == null)
                 {
                     MainMenuInfo();
                 }
@@ -200,7 +200,7 @@ public partial class ModLoader : MonoBehaviour
 
     private void Init()
     {
-        Console.WriteLine($"{Environment.NewLine}[MSCLoader Init]");
+        Console.WriteLine($"{Environment.NewLine}[FreeLoader Init]");
         string[] launchArgs = Environment.GetCommandLineArgs();
         Console.WriteLine("Launch arguments:");
         Console.WriteLine(string.Join(" ", launchArgs));
@@ -247,14 +247,6 @@ public partial class ModLoader : MonoBehaviour
         mscUnloader.reset = false;
         if (!Directory.Exists(ModsFolder))
             Directory.CreateDirectory(ModsFolder);
-        if (!Directory.Exists("Updates"))
-            Directory.CreateDirectory("Updates");
-        if (!Directory.Exists(Path.Combine("Updates", "Mods")))
-            Directory.CreateDirectory(Path.Combine("Updates", "Mods"));
-        if (!Directory.Exists(Path.Combine("Updates", "References")))
-            Directory.CreateDirectory(Path.Combine("Updates", "References"));
-        if (!Directory.Exists(Path.Combine("Updates", "Core")))
-            Directory.CreateDirectory(Path.Combine("Updates", "Core"));
 
         if (!Directory.Exists(ConfigFolder))
         {
@@ -267,91 +259,32 @@ public partial class ModLoader : MonoBehaviour
         {
             Directory.CreateDirectory(MetadataFolder);
             Directory.CreateDirectory(Path.Combine(MetadataFolder, "Mod Icons"));
-
         }
         if (!Directory.Exists(AssetsFolder))
             Directory.CreateDirectory(AssetsFolder);
 
+        Console.WriteLine("Load Core assets...");
         LoadCoreAssets();
-        if (CheckVortexBS())
-        {
-            ModUI.ShowMessage($"<b><color=orange>DON'T use Vortex</color></b> to update MSCLoader, or to install tools or mods.{Environment.NewLine}<b><color=orange>Vortex isn't supported by MSCLoader</color></b>, because it's implementation breaks Mods folder by putting wrong files into it.{Environment.NewLine}{Environment.NewLine}MSCLoader will try to fix your mods folder now, <b><color=orange>please restart your game.</color></b>{Environment.NewLine}If this message shows again after restart, rebuild your Mods folder from scratch.", "Fatal Error");
-            return;
-        }
 
-        LoadMod(new ModConsole(), MSCLoader_Ver);
+        LoadMod(new ModConsole(), FreeLoader_Ver);
         LoadedMods[0].A_ModSettings.Invoke();
-        LoadMod(new ModMenu(), MSCLoader_Ver);
+        LoadMod(new ModMenu(), FreeLoader_Ver);
         LoadedMods[1].A_ModSettings.Invoke();
         ModMenu.LoadSettings();
-        if (experimental)
-            ModConsole.Print($"<color=lime>ModLoader <b><color=aqua>v{MSCLoader_Ver}</color></b> ready</color> [<color=magenta>Experimental</color> <color=lime>build {currentBuild}</color>]");
-        else
-            ModConsole.Print($"<color=lime>ModLoader <b><color=aqua>v{MSCLoader_Ver}</color></b> ready</color>");
+        ModConsole.Print($"<color=lime>ModLoader <b><color=aqua>v{FreeLoader_Ver}</color></b> ready</color>");
         MainMenuInfo();
-        ModsUpdateDir = Directory.GetFiles(Path.Combine("Updates", "Mods"), "*.zip");
-        RefsUpdateDir = Directory.GetFiles(Path.Combine("Updates", "References"), "*.zip");
-        if (ModsUpdateDir.Length == 0 && RefsUpdateDir.Length == 0)
-        {
-            ContinueInit();
-        }
-        else
-        {
-            UnpackUpdates();
-        }
+        Console.WriteLine("Continue init");
+        ContinueInit();
         if (launchArgs.Contains("-mscloader-disable")) ModUI.ShowMessage("To use <color=yellow>-mscloader-disable</color> launch option, you need to update the core module of MSCLoader, download latest version and launch <color=aqua>MSCLInstaller.exe</color> to update", "Outdated module");
     }
     void ContinueInit()
     {
         LoadReferences();
-        try
-        {
-            if (File.Exists(Path.GetFullPath(Path.Combine("LAUNCHER.exe", ""))) || File.Exists(Path.GetFullPath(Path.Combine("SmartSteamEmu64.dll", ""))) || File.Exists(Path.GetFullPath(Path.Combine("SmartSteamEmu.dll", ""))))
-            {
-                ModConsole.Print($"<b><color=orange>Hello <color=lime>{"SmartSteamEmu!"}</color>!</color></b>");
-                throw new Exception("[EMULATOR] Do What You Want, Cause A Pirate Is Free... You Are A Pirate!");
-            }
-            if (ModMetadata.CalculateFileChecksum(Path.Combine("", "steam_api.dll")) != "7B857C897BC69313E4936DC3DCCE5193")
-            {
-                ModConsole.Print($"<b><color=orange>Hello <color=lime>{"Emulator!"}</color>!</color></b>");
-                throw new Exception("[EMULATOR] Do What You Want, Cause A Pirate Is Free... You Are A Pirate!");
-            }
-            if (ModMetadata.CalculateFileChecksum(Path.Combine("", "steam_api64.dll")) != "6C23EAB28F1CD1BFD128934B08288DD8")
-            {
-                ModConsole.Print($"<b><color=orange>Hello <color=lime>{"Emulator!"}</color>!</color></b>");
-                throw new Exception("[EMULATOR] Do What You Want, Cause A Pirate Is Free... You Are A Pirate!");
-            }
-
-            Steamworks.SteamAPI.Init();
-            steamID = Steamworks.SteamUser.GetSteamID().ToString();
-            ModConsole.Print($"<b><color=orange>Hello <color=lime>{Steamworks.SteamFriends.GetPersonaName()}</color>!</color></b>");
-            using (WebClient webClient = new WebClient())
-            {
-                webClient.Headers.Add("user-agent", $"MSCLoader/{MSCLoader_Ver} ({SystemInfoFix()})");
-                webClient.DownloadStringCompleted += SAuthCheckCompleted;
-                webClient.DownloadStringAsync(new Uri($"{serverURL}/sauth.php?sid={steamID}"));
-            }
-            if (LoadedMods.Count >= 100)
-                Steamworks.SteamFriends.SetRichPresence("status", $"This madman is playing with {actualModList.Length} mods.");
-            else if (LoadedMods.Count >= 50)
-                Steamworks.SteamFriends.SetRichPresence("status", $"Playing with {actualModList.Length} mods. Crazy!");
-            else
-                Steamworks.SteamFriends.SetRichPresence("status", $"Playing with {actualModList.Length} mods.");
-        }
-        catch (Exception e)
-        {
-            steamID = null;
-            ModConsole.Error("Steam client doesn't exists.");
-            if (devMode)
-                ModConsole.Error(e.ToString());
-            Console.WriteLine(e);
-            if (CheckSteam())
-            {
-                Console.WriteLine(new AccessViolationException().Message);
-                Environment.Exit(0);
-            }
-        }
+        
+        ModConsole.Print($"<b><color=orange>Hello <color=lime>Freedom</color>!</color></b>");
+        
         SaveLoad.LoadModsSaveData();
+        Console.WriteLine("Preload mods");
         PreLoadMods();
         if (InvalidMods.Count > 0)
             ModConsole.Print($"<b><color=orange>Loaded <color=aqua>{actualModList.Length}</color> mods (<color=magenta>{InvalidMods.Count}</color> failed to load)!</color></b>{Environment.NewLine}");
@@ -362,13 +295,19 @@ public partial class ModLoader : MonoBehaviour
         ModMenu.LoadBinds();
         GameObject old_callbacks = new GameObject("BC Callbacks");
         old_callbacks.transform.SetParent(gameObject.transform, false);
+        Console.WriteLine($"Mods using OnGUImods: {OnGUImods.Length}");
         if (OnGUImods.Length > 0) old_callbacks.AddComponent<BC_ModOnGUI>().modLoader = this;
+        Console.WriteLine($"Mods using Update: {UpdateMods.Length}");
         if (UpdateMods.Length > 0) old_callbacks.AddComponent<BC_ModUpdate>().modLoader = this;
+        Console.WriteLine($"Mods using FixedUpdate: {FixedUpdateMods.Length}");
         if (FixedUpdateMods.Length > 0) old_callbacks.AddComponent<BC_ModFixedUpdate>().modLoader = this;
         GameObject mod_callbacks = new GameObject("MSCLoader Callbacks");
         mod_callbacks.transform.SetParent(gameObject.transform, false);
+        Console.WriteLine($"Mods using Mod_OnGUI: {Mod_OnGUI.Length}");
         if (Mod_OnGUI.Length > 0) mod_callbacks.AddComponent<A_ModOnGUI>().modLoader = this;
+        Console.WriteLine($"Mods using Mod_Update: {Mod_Update.Length}");
         if (Mod_Update.Length > 0) mod_callbacks.AddComponent<A_ModUpdate>().modLoader = this;
+        Console.WriteLine($"Mods using Mod_FixedUpdate: {Mod_FixedUpdate.Length}");
         if (Mod_FixedUpdate.Length > 0) mod_callbacks.AddComponent<A_ModFixedUpdate>().modLoader = this;
         if (!returnToMainMenu)
         {
@@ -414,7 +353,6 @@ public partial class ModLoader : MonoBehaviour
         string sp = Path.Combine(SettingsFolder, Path.Combine("MSCLoader_Settings", "lastCheck"));
         if (force || ModMenu.cfmu_set == 0 || !File.Exists(sp))
         {
-            DownloadUpdateData();
             File.WriteAllText(sp, DateTime.Now.ToString());
             return;
         }
@@ -422,7 +360,6 @@ public partial class ModLoader : MonoBehaviour
         DateTime.TryParse(File.ReadAllText(sp), out lastCheck);
         if ((DateTime.Now - lastCheck).TotalDays >= ModMenu.cfmu_set || (DateTime.Now - lastCheck).TotalDays < 0)
         {
-            DownloadUpdateData();
             File.WriteAllText(sp, DateTime.Now.ToString());
         }
         else
@@ -431,32 +368,22 @@ public partial class ModLoader : MonoBehaviour
             {
                 string s = File.ReadAllText(Path.Combine(SettingsFolder, Path.Combine("MSCLoader_Settings", "updateInfo.json")));
                 ModVersions v = JsonConvert.DeserializeObject<ModVersions>(s);
-                ModMetadata.ReadUpdateInfo(v);
                 if (File.Exists(Path.Combine(SettingsFolder, Path.Combine("MSCLoader_Settings", "ref_updateInfo.json"))))
                 {
                     string s2 = File.ReadAllText(Path.Combine(SettingsFolder, Path.Combine("MSCLoader_Settings", "ref_updateInfo.json")));
                     RefVersions v2 = JsonConvert.DeserializeObject<RefVersions>(s2);
-                    ModMetadata.ReadRefUpdateInfo(v2);
                 }
                 else
                 {
-                    ModMetadata.ReadRefUpdateInfo(null);
                 }
             }
             else
             {
-                DownloadUpdateData();
                 File.WriteAllText(sp, DateTime.Now.ToString());
             }
 
         }
 
-    }
-    internal bool updChecked = false;
-    private void DownloadUpdateData()
-    {
-        StartCoroutine(CheckForRefModUpdates());
-        updChecked = true;
     }
 
     [Serializable]
@@ -672,23 +599,13 @@ public partial class ModLoader : MonoBehaviour
 
         GameObject loading = GameObject.Instantiate(loadingP);
         canvLoading = loading.GetComponent<MSCLoaderCanvasLoading>();
-        canvLoading.lHeader.text = $"MSCLOADER <color=green>{MSCLoader_Ver}</color>";
+        canvLoading.lHeader.text = $"MSCLOADER <color=green>{FreeLoader_Ver}</color>";
         DontDestroyOnLoad(loading);
 
         GameObject.Destroy(loadingP);
         GameObject.Destroy(mbP);
         ModConsole.Print("Loading core assets completed!");
         ab.Unload(false);
-    }
-
-    private bool CheckVortexBS()
-    {
-        if (File.Exists(Path.Combine(ModsFolder, "MSCLoader.dll")))
-        {
-            File.Delete(Path.Combine(ModsFolder, "MSCLoader.dll"));
-            return true;
-        }
-        return false;
     }
 
     /// <summary>
@@ -703,105 +620,17 @@ public partial class ModLoader : MonoBehaviour
     {
         Text info, mf;
         mainMenuInfo = Instantiate(mainMenuInfo);
-        mainMenuInfo.name = "MSCLoader Info";
+        mainMenuInfo.name = "FreeLoader Info";
         menuInfoAnim = mainMenuInfo.GetComponent<Animation>();
         menuInfoAnim.Play("fade_in");
         info = mainMenuInfo.transform.GetChild(0).gameObject.GetComponent<Text>();
         mf = mainMenuInfo.transform.GetChild(1).gameObject.GetComponent<Text>();
-        info.text = $"Mod Loader MSCLoader <color=cyan>v{MSCLoader_Ver}</color> is ready! (<color=orange>Checking for updates...</color>)";
-        CheckMSCLoaderVersion();
+        info.text = $"FreeLoader <color=cyan>v{FreeLoader_Ver}</color> is ready!";
         mf.text = $"<color=orange>Mods folder:</color> {ModsFolder}";
         MainMenuPath();
         mainMenuInfo.transform.SetParent(ModUI.GetCanvas(0).transform, false);
     }
 
-    private void CheckMSCLoaderVersion()
-    {
-        using (WebClient client = new WebClient())
-        {
-            client.Headers.Add("user-agent", $"MSCLoader/{MSCLoader_Ver} ({SystemInfoFix()})");
-            client.DownloadStringCompleted += VersionCheckCompleted;
-            string branch = "unknown";
-            if (experimental)
-                branch = "msc_exp";
-            else
-                branch = "msc_stable";
-            client.DownloadStringAsync(new Uri($"{serverURL}/mscl_corever.php?core={branch}"));
-        }
-    }
-
-    private void VersionCheckCompleted(object sender, DownloadStringCompletedEventArgs e)
-    {
-        Text info = mainMenuInfo.transform.GetChild(0).gameObject.GetComponent<Text>();
-        try
-        {
-            if (e.Error != null)
-            {
-                throw new Exception(e.Error.Message);
-            }
-
-            string[] result = e.Result.Split('|');
-            switch (result[0])
-            {
-                case "error":
-                    throw new Exception(result[1]);
-                case "ok":
-                    try
-                    {
-                        newBuild = int.Parse(result[2]);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex);
-                        throw new Exception("Failed to parse build number");
-                    }
-
-                    if (newBuild > currentBuild)
-                    {
-                        newVersion = result[1];
-                        info.text = $"MSCLoader <color=cyan>v{MSCLoader_Ver}</color> is ready!{(experimental ? $" [<color=magenta>Experimental</color> <color=lime>build {currentBuild}</color>]" : "")} (<color=aqua>Update is available</color>)";
-                        ModloaderUpdateMessage = true;
-                        MsgBoxBtn[] btn1 = { ModUI.CreateMessageBoxBtn("YES", DownloadModloaderUpdate), ModUI.CreateMessageBoxBtn("NO") };
-                        MsgBoxBtn[] btn2 = { ModUI.CreateMessageBoxBtn("Show Changelog", ShowChangelog, new Color32(0, 0, 80, 255), Color.white, true) };
-                        ModUI.ShowCustomMessage($"New ModLoader version is available{Environment.NewLine}<color=yellow>{MSCLoader_Ver} build {currentBuild}</color> => <color=lime>{newVersion} build {newBuild}</color>{Environment.NewLine}{Environment.NewLine}Do you want to download it now?", "MSCLoader update", btn1, btn2);
-                    }
-                    else
-                    {
-                        info.text = $"MSCLoader <color=cyan>v{MSCLoader_Ver}</color> is ready!{(experimental ? $" [<color=magenta>Experimental</color> <color=lime>build {currentBuild}</color>]" : "")} (<color=lime>Up to date</color>)";
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Unknown: " + result[0]);
-                    throw new Exception("Unknown result");
-            }
-        }
-        catch (Exception ex)
-        {
-            ModConsole.Error($"Check for new version failed with error: {ex.Message}");
-            if (devMode)
-                ModConsole.Error(ex.ToString());
-            Console.WriteLine(ex);
-            info.text = $"MSCLoader <color=cyan>v{MSCLoader_Ver}</color> is ready!{(experimental ? $" [<color=magenta>Experimental</color> <color=lime>build {currentBuild}</color>]" : "")}";
-        }
-        if (devMode)
-            info.text += " [<color=red><b>Dev Mode!</b></color>]";
-    }
-    internal void ShowChangelog()
-    {
-        string dwl = string.Empty;
-        WebClient getdwl = new WebClient();
-        getdwl.Headers.Add("user-agent", $"MSCLoader/{MSCLoader_Ver} ({SystemInfoFix()})");
-        try
-        {
-            dwl = getdwl.DownloadString($"{serverURL}/changelog.php?mods=MSCLoader&vers={newVersion}&names=MSCLoader");
-        }
-        catch (Exception e)
-        {
-            dwl = "<color=red>Failed to download changelog...</color>";
-            Console.WriteLine(e);
-        }
-        ModUI.ShowChangelogWindow(dwl);
-    }
     internal static void ModException(Exception e, Mod mod, bool save = false)
     {
         string errorDetails = $"{Environment.NewLine}<b>Details: </b>{e.Message} in <b>{new StackTrace(e, true).GetFrame(0).GetMethod()}</b>";
@@ -1035,34 +864,6 @@ public partial class ModLoader : MonoBehaviour
         return (method.IsVirtual && method.DeclaringType == mod.GetType() && method.GetMethodBody().GetILAsByteArray().Length > 2);
     }
 
-    private void LoadEADll(string file)
-    {
-        if (!CheckSteam()) return;
-        string response = string.Empty;
-        response = MSCLInternal.MSCLDataRequest("mscl_ea.php", new Dictionary<string, string> { { "steamID", steamID }, { "file", Path.GetFileNameWithoutExtension(file) } });
-        string[] result = response.Split('|');
-        switch (result[0])
-        {
-            case "error":
-                ModConsole.Error($"<b>{Path.GetFileName(file)}</b> - {result[1]}");
-                break;
-            case "ok":
-                byte[] input;
-                using (BinaryReader reader = new BinaryReader(File.OpenRead(file)))
-                {
-                    reader.BaseStream.Seek(3, SeekOrigin.Begin);
-                    input = new byte[reader.BaseStream.Length - 3];
-                    reader.Read(input, 0, input.Length);
-                }
-                byte[] key = Encoding.ASCII.GetBytes(result[1]);
-                LoadDLL($"{Path.GetFileNameWithoutExtension(file)}.dll", input.Cry_ScrambleByteRightDec(key));
-                break;
-            default:
-                Console.WriteLine(result);
-                break;
-        }
-    }
-
     private void PreLoadMods()
     {
         // Load .dll files
@@ -1083,7 +884,6 @@ public partial class ModLoader : MonoBehaviour
 
             if (MSCLInternal.IsEAFile(files[i]))
             {
-                LoadEADll(files[i]);
             }
             else
             {
@@ -1094,7 +894,7 @@ public partial class ModLoader : MonoBehaviour
         {
             File.Delete(Path.Combine(ModsFolder, "unused.txt"));
         }
-        actualModList = LoadedMods.Where(x => !x.ID.StartsWith("MSCLoader_")).ToArray();
+        actualModList = LoadedMods.ToArray();
         BC_ModList = actualModList.Where(x => !x.newFormat).ToArray();
 
         PLoadMods = BC_ModList.Where(x => CheckEmptyMethod(x, "PreLoad")).ToArray();
@@ -1112,7 +912,6 @@ public partial class ModLoader : MonoBehaviour
         Mod_OnGUI = actualModList.Where(x => x.newFormat && x.A_OnGUI != null).ToArray();
         Mod_Update = LoadedMods.Where(x => x.newFormat && x.A_Update != null).ToArray();
         Mod_FixedUpdate = actualModList.Where(x => x.newFormat && x.A_FixedUpdate != null).ToArray();
-        GetRequiredFilesData();
         //cleanup files if not in dev mode
         if (!devMode)
         {
@@ -1145,50 +944,6 @@ public partial class ModLoader : MonoBehaviour
 
         }
 
-    }
-    void GetRequiredFilesData()
-    {
-        //  modIDsReferences = new List<string>();
-        if (modIDsReferences.Count == 0 && crashedGuids.Count == 0)
-            return;
-        List<string> missingModIDsReferences = new List<string>();
-        for (int i = 0; i < modIDsReferences.Count; i++)
-        {
-            if (!ReferencesArePresent(GetModByID(modIDsReferences[i]).AdditionalReferences))
-            {
-                missingModIDsReferences.Add(modIDsReferences[i]);
-            }
-        }
-        if (missingModIDsReferences.Count == 0 && crashedGuids.Count == 0)
-            return;
-        string response = MSCLInternal.MSCLDataRequest("mscl_required.php", new Dictionary<string, List<string>> { { "ModIDs", missingModIDsReferences }, { "guids", crashedGuids } });
-        //RequiredList
-        if (response.StartsWith("error"))
-        {
-            string[] result = response.Split('|');
-            ModConsole.Error(result[1]);
-        }
-        else if (response.StartsWith("{"))
-        {
-            RequiredList list = JsonConvert.DeserializeObject<RequiredList>(response);
-            List<string> refsToDwl = new List<string>();
-            List<string> modsToDwl = new List<string>();
-            for (int i = 0; i < list.references.Count; i++)
-            {
-                if (!IsReferencePresent(list.references[i]))
-                    refsToDwl.Add(list.references[i]);
-            }
-            for (int i = 0; i < list.mods.Count; i++)
-            {
-                if (!IsModPresent(list.mods[i], true))
-                    modsToDwl.Add(list.mods[i]);
-            }
-            DownloadRequiredFiles(refsToDwl, modsToDwl);
-        }
-        else
-        {
-            Console.WriteLine(response);
-        }
     }
 
     void CleanupFolders()
@@ -1230,7 +985,6 @@ public partial class ModLoader : MonoBehaviour
         {
             if (LoadedMods[i].ID.StartsWith("MSCLoader_"))
                 continue;
-            ModMetadata.ReadMetadata(LoadedMods[i]);
             try
             {
                 Settings.ModSettings(LoadedMods[i]);

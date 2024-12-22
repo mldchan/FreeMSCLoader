@@ -11,7 +11,7 @@
     <AssemblyName>MSCLoader</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <LangVersion>12</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'MSC_Debug|AnyCPU' ">
@@ -66,9 +66,6 @@
     <Reference Include="Ionic.Zip" Condition="!$(DefineConstants.Contains('Mini'))">
       <HintPath>..\..\..\..\..\Steam\steamapps\common\My Summer Car\mysummercar_Data\Managed\Ionic.Zip.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="MSCCoreLibrary">
-      <HintPath>..\..\..\..\..\Steam\steamapps\common\My Summer Car\Mods\References\MSCCoreLibrary.dll</HintPath>
     </Reference>
     <Reference Include="NAudio" Condition="!$(DefineConstants.Contains('Mini'))">
       <HintPath>..\..\..\..\..\Steam\steamapps\common\My Summer Car\mysummercar_Data\Managed\NAudio.dll</HintPath>
@@ -151,7 +148,6 @@
     <Compile Include="ModCallbacks\BC_ModOnGUI.cs" />
     <Compile Include="ModLoader.Internal.cs" />
     <Compile Include="ModLoader.Public.cs" />
-    <Compile Include="ModLoader.Updates.cs" />
     <Compile Include="ModMenu\ListStuff.cs" />
     <Compile Include="ModMenu\MenuElementList.cs" />
     <Compile Include="ModMenu\ModMenuButton.cs" />
@@ -193,19 +189,13 @@
   <ItemGroup>
     <EmbeddedResource Include="CoreAssets\core.unity3d" Condition="!$(DefineConstants.Contains('Mini'))" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MSCCoreLibrary\MSCCoreLibrary\MSCCoreLibrary.csproj">
+      <Project>{714f4dea-70ab-402f-a73f-d70909b237f2}</Project>
+      <Name>MSCCoreLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "MSC_Release" (
-copy $(TargetPath) "D:\Steam\steamapps\common\My Summer Car\mysummercar_Data\Managed" /y
-) 
-if "$(ConfigurationName)" == "MSC_Debug" (
-copy $(TargetPath) "D:\Steam\steamapps\common\My Summer Car\mysummercar_Data\Managed" /y
-copy "$(TargetDir)$(TargetName).pdb" "D:\Steam\steamapps\common\My Summer Car\mysummercar_Data\Managed" /y
-cd "D:\Steam\steamapps\common\My Summer Car\mysummercar_Data\Managed\"
-call "D:\Steam\steamapps\common\My Summer Car\mysummercar_Data\Managed\debug.bat"
-)
-</PostBuildEvent>
-  </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
