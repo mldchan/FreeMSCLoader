@@ -280,11 +280,12 @@ public partial class ModLoader : MonoBehaviour
     void ContinueInit()
     {
         LoadReferences();
+
+        var playerName = ModMenu.playerName.Value;
+        ModConsole.Print($"<b><color=orange>Hello <color=lime>{playerName}</color>!</color></b>");
         
-        ModConsole.Print($"<b><color=orange>Hello <color=lime>Freedom</color>!</color></b>");
-        
-        ModConsole.Print("<b>This program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.</b>");
-        ModConsole.Print("<b>This program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\nGNU General Public License for more details.</b>");
+        ModConsole.Print("<b>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</b>");
+        ModConsole.Print("<b>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</b>");
         
         SaveLoad.LoadModsSaveData();
         Console.WriteLine("Preload mods");
@@ -298,19 +299,13 @@ public partial class ModLoader : MonoBehaviour
         ModMenu.LoadBinds();
         GameObject old_callbacks = new GameObject("BC Callbacks");
         old_callbacks.transform.SetParent(gameObject.transform, false);
-        Console.WriteLine($"Mods using OnGUImods: {OnGUImods.Length}");
         if (OnGUImods.Length > 0) old_callbacks.AddComponent<BC_ModOnGUI>().modLoader = this;
-        Console.WriteLine($"Mods using Update: {UpdateMods.Length}");
         if (UpdateMods.Length > 0) old_callbacks.AddComponent<BC_ModUpdate>().modLoader = this;
-        Console.WriteLine($"Mods using FixedUpdate: {FixedUpdateMods.Length}");
         if (FixedUpdateMods.Length > 0) old_callbacks.AddComponent<BC_ModFixedUpdate>().modLoader = this;
         GameObject mod_callbacks = new GameObject("MSCLoader Callbacks");
         mod_callbacks.transform.SetParent(gameObject.transform, false);
-        Console.WriteLine($"Mods using Mod_OnGUI: {Mod_OnGUI.Length}");
         if (Mod_OnGUI.Length > 0) mod_callbacks.AddComponent<A_ModOnGUI>().modLoader = this;
-        Console.WriteLine($"Mods using Mod_Update: {Mod_Update.Length}");
         if (Mod_Update.Length > 0) mod_callbacks.AddComponent<A_ModUpdate>().modLoader = this;
-        Console.WriteLine($"Mods using Mod_FixedUpdate: {Mod_FixedUpdate.Length}");
         if (Mod_FixedUpdate.Length > 0) mod_callbacks.AddComponent<A_ModFixedUpdate>().modLoader = this;
         if (!returnToMainMenu)
         {
@@ -897,7 +892,7 @@ public partial class ModLoader : MonoBehaviour
         {
             File.Delete(Path.Combine(ModsFolder, "unused.txt"));
         }
-        actualModList = LoadedMods.ToArray();
+        actualModList = LoadedMods.Where(x => !x.ID.StartsWith("MSCLoader_")).ToArray();
         BC_ModList = actualModList.Where(x => !x.newFormat).ToArray();
 
         PLoadMods = BC_ModList.Where(x => CheckEmptyMethod(x, "PreLoad")).ToArray();

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 
 namespace MSCLoader;
 
@@ -20,8 +21,8 @@ internal class ModMenu : Mod
     internal static ModMenu instance;
     internal static SettingsCheckBox dm_disabler, dm_logST, dm_operr, dm_warn, dm_pcon;
     internal static SettingsCheckBox expWarning, modPath, forceMenuVsync, openLinksOverlay, skipGameIntro, skipConfigScreen;
+    internal static SettingsTextBox playerName;
 
-    private static SettingsCheckBoxGroup checkLaunch, checkDaily, checkWeekly;
     private System.Diagnostics.FileVersionInfo coreVer;
 
     public override void ModSetup()
@@ -53,12 +54,9 @@ internal class ModMenu : Mod
         skipGameIntro = Settings.AddCheckBox("MSCLoader_skipGameIntro", "Skip game splash screen", false, SkipIntroSet);
         skipConfigScreen = Settings.AddCheckBox("MSCLoader_skipConfigScreen", "Skip configuration screen", false, SkipConfigScreen);
 
-        Settings.AddHeader("Update Settings");
-        Settings.AddText("How often MSCLoader checks for Mod/References updates.");
-        checkLaunch = Settings.AddCheckBoxGroup("MSCLoader_checkOnLaunch", "Every launch", true, "cfmu_set");
-        checkDaily = Settings.AddCheckBoxGroup("MSCLoader_checkEveryDay", "Daily", false, "cfmu_set");
-        checkWeekly = Settings.AddCheckBoxGroup("MSCLoader_checkEveryWeek", "Weekly", false, "cfmu_set");
-
+        Settings.AddHeader("FreeLoader specific settings");
+        playerName = Settings.AddTextBox("FreeLoader_name", "Name in console", "Freedom", "Freedom");
+        
         Settings.AddHeader("MSCLoader Credits", Color.black);
         Settings.AddText("All source code contributors and used libraries are listed on GitHub");
         Settings.AddText("Non-GitHub contributions:");
@@ -105,12 +103,6 @@ internal class ModMenu : Mod
         {
             skipConfigScreen.SetValue(configSkip);
         }
-        if (checkLaunch.GetValue())
-            cfmu_set = 0;
-        else if (checkDaily.GetValue())
-            cfmu_set = 1;
-        else if (checkWeekly.GetValue())
-            cfmu_set = 7;
     }
 
     private void SkipIntroSet()
