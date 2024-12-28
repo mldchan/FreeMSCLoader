@@ -2,8 +2,10 @@
 [![](https://img.shields.io/github/downloads/piotrulos/MSCModLoader/total.svg?style=flat-square)](#) 
 [![](https://img.shields.io/github/license/piotrulos/MSCModLoader.svg?style=flat-square)](#) 
 
-# MSCLoader
-A mod loader for My Summer Car 
+# FreeMSCLoader
+A mod loader for My Summer Car, without the update server over insecure HTTP.
+
+Original work is by piotrulos, this modification was made so that anyone can use MSCLoader without sending any requests to an update server running over insecure HTTP. HTTPS certificates and/or Cloudflare are free nowadays.
 
 Please report any issues and ideas [here](https://github.com/piotrulos/MSCModLoader/issues)
 
@@ -33,7 +35,7 @@ If you want to port this to other games make sure to link original reposity in y
 * [UnityDoorstop](https://github.com/NeighTools/UnityDoorstop) - v3 - **CC0 (Public Domain)** / v4 - **LGPL-2.1 license (LGPL-2.1)**   
 * [INIFileParser](https://github.com/rickyah/ini-parser) - **MIT License (MIT)**    
 
-## Like My Work?
+## Like piotrulos's Work?
 If you want you can buy me a beer :)   
 Paypal: [Paypal.me](https://www.paypal.me/piotrulos/0eur)  
 BTC: 1NLRvUXHLhuLz5erVWyXdY7i8KmfCSjJgP  
