@@ -25,7 +25,10 @@ A documentation for MSCLoader is avaliable [here](https://github.com/piotrulos/M
 8. Unpack downloaded mods in the Mods folder you selected and you are ready!
 
 ## License
-MSCLoader is licensed under **GNU General Public License v3.0 (GPL v3)**   
+MSCLoader and its derivative work FreeMSCLoader are licensed under **GNU General Public License v3.0 (GPL v3)**   
+
+This project is a derivative work from MSCLoader, and by the GNU GPL v3 I am required to make the source code public, along with the list of changes that were done. I can distribute this freely according to the license, without anyone having the ability to take my rights to do so.
+
 If you want to port this to other games make sure to link original reposity in your credits and keep it under same license (open-source).
 
 ## Used Libriaries
