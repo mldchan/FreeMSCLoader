@@ -1,4 +1,6 @@
 ﻿global using UnityEngine;
+using HutongGames.PlayMaker.Actions;
+
 
 
 #if !Mini
@@ -110,7 +112,23 @@ public partial class ModLoader : MonoBehaviour
             GameObject go = new GameObject("MSCLoader", typeof(ModLoader));
             Instance = go.GetComponent<ModLoader>();
             DontDestroyOnLoad(go);
+        }
+        if (Application.loadedLevelName == "MainMenu" && !initCalled)
+        {
+            initCalled = true;
             Instance.Init();
+            return;
+        }
+        if (Application.loadedLevelName == "SplashScreen")
+        {
+            GameObject d = GameObject.Find("Logic").GetPlayMaker("FSM").GetState("State 3").GetAction<ActivateGameObject>(1).gameObject.GameObject.Value;
+            if (d != null)
+            {
+                Wait w = new Wait();
+                w.time = 0.5f;
+                d.transform.Find("Button").GetPlayMaker("Button").FsmInject("State 1", () => { d.transform.GetChild(0).GetComponent<TextMesh>().text = "PREPARING MSCLOADER........."; }, false, 0);
+                d.transform.Find("Button").GetPlayMaker("Button").GetState("State 1").InsertAction(1, w);
+            }
         }
     }
     bool vse = false;
@@ -119,6 +137,7 @@ public partial class ModLoader : MonoBehaviour
         switch (Application.loadedLevelName)
         {
             case "MainMenu":
+                PrepareModLoader();
                 CurrentScene = CurrentScene.MainMenu;
                 if (GameObject.Find("Music"))
                     GameObject.Find("Music").GetComponent<AudioSource>().Play();
@@ -165,6 +184,9 @@ public partial class ModLoader : MonoBehaviour
                 if (IsReferencePresent("MSCCoreLibrary"))
                     TimeSchedulerCalls("stop");
                 break;
+            default:
+                break;
+
         }
     }
 
@@ -263,7 +285,6 @@ public partial class ModLoader : MonoBehaviour
         if (!Directory.Exists(AssetsFolder))
             Directory.CreateDirectory(AssetsFolder);
 
-        Console.WriteLine("Load Core assets...");
         LoadCoreAssets();
 
         LoadMod(new ModConsole(), FreeLoader_Ver);
@@ -288,7 +309,6 @@ public partial class ModLoader : MonoBehaviour
         ModConsole.Print("<b>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</b>");
         
         SaveLoad.LoadModsSaveData();
-        Console.WriteLine("Preload mods");
         PreLoadMods();
         if (InvalidMods.Count > 0)
             ModConsole.Print($"<b><color=orange>Loaded <color=aqua>{actualModList.Length}</color> mods (<color=magenta>{InvalidMods.Count}</color> failed to load)!</color></b>{Environment.NewLine}");
