@@ -39,7 +39,7 @@ public class ModConsole : Mod
     {
         Settings.ModSettings(this);
         consoleKey = Keybind.Add(this, "Open", "<color=lime>Open console key combination</color>", KeyCode.BackQuote);
-        Settings.AddHeader("MSCLoader info", Color.black);
+        Settings.AddHeader("FreeLoader info", Color.black);
         versionText = Settings.AddText($"<color=lime>FreeLoader {ModLoader.FreeLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
         Settings.AddHeader("Console Settings");
         Settings.AddText("Basic settings for console");
@@ -61,11 +61,11 @@ public class ModConsole : Mod
     {
         if (ModLoader.Instance.newBuild > ModLoader.Instance.currentBuild)
         {
-            versionText.SetValue($"<color=orange>MSCLoader {ModLoader.FreeLoader_Ver} build {ModLoader.Instance.currentBuild}</color> -> <color=lime>MSCLoader {ModLoader.Instance.newVersion} build {ModLoader.Instance.newBuild}</color>");
+            versionText.SetValue($"<color=orange>FreeLoader {ModLoader.FreeLoader_Ver} build {ModLoader.Instance.currentBuild}</color> -> <color=lime>MSCLoader {ModLoader.Instance.newVersion} build {ModLoader.Instance.newBuild}</color>");
         }
         else
         {
-            versionText.SetValue($"<color=lime>MSCLoader {ModLoader.FreeLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
+            versionText.SetValue($"<color=lime>FreeLoader {ModLoader.FreeLoader_Ver} build {ModLoader.Instance.currentBuild}</color>");
         }
         string sp = Path.Combine(ModLoader.SettingsFolder, Path.Combine("MSCLoader_Settings", "lastCheck"));
         if (File.Exists(sp))
