@@ -112,8 +112,6 @@ public class ModConsole : Mod
         //Add Console Commands
         ConsoleCommand.Add(new CommandVersion());
         ConsoleCommand.Add(new CommandLogAll());
-        ConsoleCommand.Add(new MetadataCommand());
-        ConsoleCommand.Add(new EarlyAccessCommand());
         ConsoleCommand.Add(new SaveDbgCommand());
     }
     /// <summary>
